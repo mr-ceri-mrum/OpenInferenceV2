@@ -22,9 +22,10 @@ const HeaderContent = styled.div`
   padding: 20px 0;
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(Link)`
   display: flex;
   align-items: center;
+  text-decoration: none;
 `;
 
 const LogoImage = styled.img`
@@ -163,7 +164,7 @@ const Header = () => {
       }}>
         <Container>
           <HeaderContent>
-            <LogoWrapper>
+            <LogoWrapper to="/">
               <LogoImage src={Logo} alt="Open Inference Logo" />
               <LogoText>Open Inference</LogoText>
             </LogoWrapper>
