@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
+import Button from '../common/Button';
+import ContactForm from '../common/ContactForm';
 
 const ServicesListSection = styled.section`
   padding: 100px 0;
@@ -89,7 +91,19 @@ const FeatureItem = styled.li`
   }
 `;
 
+const ButtonContainer = styled.div`
+  margin-top: 20px;
+`;
+
 const ServicesList = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
+
+  const openContactModal = (service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
   const services = [
     {
       id: 1,
@@ -142,11 +156,22 @@ const ServicesList = () => {
                     <FeatureItem key={index}>{feature}</FeatureItem>
                   ))}
                 </FeaturesList>
+                <ButtonContainer>
+                  <Button onClick={() => openContactModal(service.title)}>
+                    Узнать подробнее
+                  </Button>
+                </ButtonContainer>
               </ServiceContent>
             </ServiceCard>
           ))}
         </ServicesGrid>
       </Container>
+      
+      <ContactForm 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        service={selectedService}
+      />
     </ServicesListSection>
   );
 };
