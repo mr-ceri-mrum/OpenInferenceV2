@@ -21,11 +21,14 @@ const SolutionsContent = styled.div`
 const SolutionsMedia = styled.div`
   flex: 1;
   margin-right: 50px;
+  max-width: 368px; /* Ограничиваем максимальную ширину как у телефона */
   
   @media (max-width: 992px) {
     margin-right: 0;
     margin-bottom: 40px;
     width: 100%;
+    max-width: 368px;
+    margin: 0 auto 40px;
   }
 `;
 
@@ -35,7 +38,7 @@ const VideoContainer = styled.div`
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   position: relative;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  padding-top: 177.78%; /* Соотношение сторон 9:16 для вертикального видео как на телефоне */
   background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
 `;
 
@@ -46,31 +49,6 @@ const Video = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`;
-
-const VideoPlaceholder = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-  padding: 20px;
-`;
-
-const VideoIcon = styled.div`
-  font-size: 48px;
-  margin-bottom: 15px;
-`;
-
-const VideoText = styled.p`
-  font-size: 18px;
-  margin-bottom: 10px;
 `;
 
 const SolutionsText = styled.div`
