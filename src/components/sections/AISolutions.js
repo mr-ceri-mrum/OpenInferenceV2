@@ -36,8 +36,8 @@ const SolutionsMedia = styled.div`
 const PhoneContainer = styled.div`
   width: 100%;
   position: relative;
-  padding: 15px 12px;
-  border-radius: 45px;
+  padding: 12px 10px;
+  border-radius: 40px;
   background-color: #1a1a1a;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid #333;
@@ -46,13 +46,13 @@ const PhoneContainer = styled.div`
   &:before {
     content: '';
     position: absolute;
-    top: 12px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 30px;
+    width: 100px;
+    height: 25px;
     background-color: #111;
-    border-radius: 20px;
+    border-radius: 18px;
     z-index: 2;
   }
   
@@ -64,7 +64,7 @@ const PhoneContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: 45px;
+    border-radius: 40px;
     box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.1);
     pointer-events: none;
   }
@@ -74,9 +74,9 @@ const PhoneContainer = styled.div`
 const VolumeBtnUp = styled.div`
   position: absolute;
   left: -2px;
-  top: 120px;
-  width: 4px;
-  height: 30px;
+  top: 100px;
+  width: 3px;
+  height: 25px;
   background-color: #2a2a2a;
   border-radius: 2px 0 0 2px;
 `;
@@ -84,9 +84,9 @@ const VolumeBtnUp = styled.div`
 const VolumeBtnDown = styled.div`
   position: absolute;
   left: -2px;
-  top: 160px;
-  width: 4px;
-  height: 30px;
+  top: 135px;
+  width: 3px;
+  height: 25px;
   background-color: #2a2a2a;
   border-radius: 2px 0 0 2px;
 `;
@@ -94,9 +94,9 @@ const VolumeBtnDown = styled.div`
 const PowerBtn = styled.div`
   position: absolute;
   right: -2px;
-  top: 140px;
-  width: 4px;
-  height: 40px;
+  top: 115px;
+  width: 3px;
+  height: 35px;
   background-color: #2a2a2a;
   border-radius: 0 2px 2px 0;
 `;
@@ -106,7 +106,7 @@ const PhoneScreen = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 35px;
+  border-radius: 30px;
   background-color: #000;
 `;
 
@@ -114,7 +114,7 @@ const VideoContainer = styled.div`
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding-top: 200%; /* Более вытянутый экран для современного iPhone */
+  padding-top: 175%; /* Уменьшенное соотношение сторон для лучшего соответствия видео */
   background: #000;
 `;
 
@@ -124,8 +124,8 @@ const Video = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* изменено с cover на contain для отображения всего содержимого */
-  object-position: center; /* центрировать видео */
+  object-fit: contain; /* показывает все содержимое полностью */
+  object-position: center; /* центрирует видео */
   padding: 0 4px; /* небольшой отступ для предотвращения обрезки текста по краям */
 `;
 
@@ -135,10 +135,10 @@ const HomeIndicator = styled.div`
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 40%;
-  height: 5px;
+  width: 35%;
+  height: 4px;
   background-color: white;
-  border-radius: 3px;
+  border-radius: 2px;
   opacity: 0.6;
   z-index: 10;
 `;
