@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
+import ContactModal from '../common/ContactModal';
 import PreviewVideo from '../../assets/previe.mp4';
 
 const SolutionsSection = styled.section`
@@ -100,7 +101,7 @@ const VideoContainer = styled.div`
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding-top: 215%; /* Уменьшенное соотношение сторон для лучшего соответствия видео */
+  padding-top: 215%; /* Соотношение сторон для соответствия видео */
   background: #000;
 `;
 
@@ -176,6 +177,13 @@ const SolutionItemDescription = styled.p`
 `;
 
 const AISolutions = () => {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
+  const openContactModal = (e) => {
+    e.preventDefault();
+    setIsContactModalOpen(true);
+  };
+
   const solutions = [
     {
       id: 1,
@@ -198,48 +206,52 @@ const AISolutions = () => {
   ];
 
   return (
-    <SolutionsSection id="ai-solutions">
-      <Container>
-        <SolutionsContent>
-          <SolutionsMedia>
-            <PhoneContainer>
-              <VolumeBtnUp />
-              <VolumeBtnDown />
-              <PowerBtn />
-              <PhoneScreen>
-                <VideoContainer>
-                  <Video src={PreviewVideo} controls />
-                  <HomeIndicator />
-                </VideoContainer>
-              </PhoneScreen>
-            </PhoneContainer>
-          </SolutionsMedia>
-          
-          <SolutionsText>
-            <Title>Наши ИИ-решения для вашего бизнеса</Title>
-            <Description>
-              Open Inference предлагает инновационные решения на базе искусственного интеллекта,
-              которые помогают оптимизировать бизнес-процессы, автоматизировать рутинные задачи
-              и повышать качество обслуживания клиентов.
-            </Description>
+    <>
+      <SolutionsSection id="ai-solutions">
+        <Container>
+          <SolutionsContent>
+            <SolutionsMedia>
+              <PhoneContainer>
+                <VolumeBtnUp />
+                <VolumeBtnDown />
+                <PowerBtn />
+                <PhoneScreen>
+                  <VideoContainer>
+                    <Video src={PreviewVideo} controls />
+                    <HomeIndicator />
+                  </VideoContainer>
+                </PhoneScreen>
+              </PhoneContainer>
+            </SolutionsMedia>
             
-            <SolutionsList>
-              {solutions.map(solution => (
-                <SolutionItem key={solution.id}>
-                  <SolutionIcon>{solution.icon}</SolutionIcon>
-                  <SolutionItemText>
-                    <SolutionItemTitle>{solution.title}</SolutionItemTitle>
-                    <SolutionItemDescription>{solution.description}</SolutionItemDescription>
-                  </SolutionItemText>
-                </SolutionItem>
-              ))}
-            </SolutionsList>
-            
-            <Button href="#contact">Узнать больше</Button>
-          </SolutionsText>
-        </SolutionsContent>
-      </Container>
-    </SolutionsSection>
+            <SolutionsText>
+              <Title>Наши ИИ-решения для вашего бизнеса</Title>
+              <Description>
+                Open Inference предлагает инновационные решения на базе искусственного интеллекта,
+                которые помогают оптимизировать бизнес-процессы, автоматизировать рутинные задачи
+                и повышать качество обслуживания клиентов.
+              </Description>
+              
+              <SolutionsList>
+                {solutions.map(solution => (
+                  <SolutionItem key={solution.id}>
+                    <SolutionIcon>{solution.icon}</SolutionIcon>
+                    <SolutionItemText>
+                      <SolutionItemTitle>{solution.title}</SolutionItemTitle>
+                      <SolutionItemDescription>{solution.description}</SolutionItemDescription>
+                    </SolutionItemText>
+                  </SolutionItem>
+                ))}
+              </SolutionsList>
+              
+              <Button onClick={openContactModal}>Узнать больше</Button>
+            </SolutionsText>
+          </SolutionsContent>
+        </Container>
+      </SolutionsSection>
+      
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+    </>
   );
 };
 
