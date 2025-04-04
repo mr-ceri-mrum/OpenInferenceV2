@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaTelegram } from 'react-icons/fa';
 
 const Modal = styled.div`
   position: fixed;
@@ -108,6 +107,8 @@ const SocialLink = styled.a`
   align-items: center;
   justify-content: center;
   transition: var(--transition);
+  font-size: 18px;
+  text-decoration: none;
   
   &:hover {
     transform: translateY(-3px);
@@ -159,21 +160,11 @@ const ContactInfo = ({ isOpen, onClose }) => {
           <ContactText>
             <ContactLabel>Социальные сети</ContactLabel>
             <SocialWrapper>
-              <SocialLink href="#" bg="#3b5998" color="#fff">
-                <FaFacebookF />
-              </SocialLink>
-              <SocialLink href="#" bg="#1da1f2" color="#fff">
-                <FaTwitter />
-              </SocialLink>
-              <SocialLink href="#" bg="#0077b5" color="#fff">
-                <FaLinkedinIn />
-              </SocialLink>
-              <SocialLink href="#" bg="#e1306c" color="#fff">
-                <FaInstagram />
-              </SocialLink>
-              <SocialLink href="#" bg="#0088cc" color="#fff">
-                <FaTelegram />
-              </SocialLink>
+              <SocialLink href="#" bg="#3b5998" color="#fff">f</SocialLink>
+              <SocialLink href="#" bg="#1da1f2" color="#fff">t</SocialLink>
+              <SocialLink href="#" bg="#0077b5" color="#fff">in</SocialLink>
+              <SocialLink href="#" bg="#e1306c" color="#fff">ig</SocialLink>
+              <SocialLink href="#" bg="#0088cc" color="#fff">tg</SocialLink>
             </SocialWrapper>
           </ContactText>
         </ContactItem>
