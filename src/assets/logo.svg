@@ -1,19 +1,88 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#00c2ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7b2ff7;stop-opacity:1" />
+    <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00E0FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#7b2ff7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ff2d87;stop-opacity:1" />
+    <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5B3DC8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A239CA;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#00c2ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ff2d87;stop-opacity:1" />
+    <linearGradient id="pink-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C724B1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF0080;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <path d="M300,150 C360,150 410,200 410,260 C410,320 360,370 300,370 C240,370 190,320 190,260 C190,200 240,150 300,150 Z" fill="none" stroke="url(#grad1)" stroke-width="60" opacity="0.8" />
-  <path d="M230,240 C290,240 340,290 340,350 C340,410 290,460 230,460 C170,460 120,410 120,350 C120,290 170,240 230,240 Z" fill="none" stroke="url(#grad2)" stroke-width="60" opacity="0.8" />
-  <path d="M370,240 C430,240 480,290 480,350 C480,410 430,460 370,460 C310,460 260,410 260,350 C260,290 310,240 370,240 Z" fill="none" stroke="url(#grad3)" stroke-width="60" opacity="0.8" />
+  
+  <!-- Outer gear shape with rounded corners -->
+  <path d="M300,100 
+    C320,100 340,105 350,120
+    L400,170
+    C415,185 420,205 415,225
+    L405,275
+    C400,295 410,315 425,325
+    L475,355
+    C495,365 505,385 500,405
+    L480,455
+    C475,475 480,495 495,505
+    L545,535
+    C560,545 565,565 560,585
+    L535,585
+    C515,585 495,580 485,565
+    L455,525
+    C440,510 420,505 400,510
+    L350,520
+    C330,525 310,515 300,500
+    L290,515
+    C280,530 260,535 240,530
+    L190,520
+    C170,515 150,520 135,535
+    L105,575
+    C95,590 75,595 55,595
+    L30,595
+    C25,575 30,555 45,545
+    L95,515
+    C110,505 115,485 110,465
+    L90,415
+    C85,395 95,375 115,365
+    L165,335
+    C180,325 190,305 185,285
+    L175,235
+    C170,215 175,195 190,180
+    L240,130
+    C255,115 275,110 295,110"
+    fill="none" 
+    stroke="url(#blue-gradient)" 
+    stroke-width="30" 
+    opacity="0.8" />
+
+  <!-- Inner circular path representing the center hole -->
+  <circle cx="300" cy="350" r="150" 
+    fill="white" 
+    stroke="none" />
+
+  <!-- Overlapping elements to create the multi-color effect -->
+  <path d="M180,250
+    C170,230 170,210 180,190
+    L220,130
+    C235,115 255,110 275,115
+    L325,125
+    C345,130 365,125 380,110
+    L420,70
+    C430,60 445,55 460,60"
+    fill="none" 
+    stroke="url(#purple-gradient)" 
+    stroke-width="30" 
+    opacity="0.7" />
+
+  <path d="M440,440
+    C460,430 470,410 465,390
+    L455,340
+    C450,320 455,300 470,285
+    L510,245
+    C525,230 530,210 525,190"
+    fill="none" 
+    stroke="url(#pink-gradient)" 
+    stroke-width="30" 
+    opacity="0.7" />
 </svg>
