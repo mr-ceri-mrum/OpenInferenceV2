@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
-import ContactModal from '../common/ContactModal';
+import ContactForm from '../common/ContactForm';
 
 const CTASection = styled.section`
   padding: 80px 0;
@@ -35,16 +35,16 @@ const CTAButtons = styled.div`
 `;
 
 const CTA = () => {
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openContactModal = (e) => {
     e.preventDefault();
-    setIsContactModalOpen(true);
+    setIsModalOpen(true);
   };
 
   return (
     <>
-      <CTASection>
+      <CTASection id="contact">
         <Container>
           <Title>Готовы трансформировать ваш бизнес?</Title>
           <Description>
@@ -53,12 +53,16 @@ const CTA = () => {
           </Description>
           <CTAButtons>
             <Button variant="secondary" onClick={openContactModal}>Связаться с нами</Button>
-            <Button href="#services">Наши услуги</Button>
+            <Button href="#services-list">Наши услуги</Button>
           </CTAButtons>
         </Container>
       </CTASection>
       
-      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+      <ContactForm 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        service=""
+      />
     </>
   );
 };
