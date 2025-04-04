@@ -34,27 +34,13 @@ const SolutionsMedia = styled.div`
 
 // Контейнер в стиле iPhone 15
 const PhoneContainer = styled.div`
-  width: 100%;
+  width: 90%;
   position: relative;
   padding: 12px 10px;
   border-radius: 40px;
   background-color: #1a1a1a;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid #333;
-  
-  /* Dynamic Island (выемка сверху) */
-  &:before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 25px;
-    background-color: #111;
-    border-radius: 18px;
-    z-index: 2;
-  }
   
   /* Блик на рамке */
   &:after {
@@ -114,7 +100,7 @@ const VideoContainer = styled.div`
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding-top: 175%; /* Уменьшенное соотношение сторон для лучшего соответствия видео */
+  padding-top: 215%; /* Уменьшенное соотношение сторон для лучшего соответствия видео */
   background: #000;
 `;
 
