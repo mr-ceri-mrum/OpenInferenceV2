@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
+import ContactForm from '../common/ContactForm';
 
 const ServiceDetailsSection = styled.section`
   padding: 100px 0;
@@ -142,9 +143,16 @@ const PlaceholderImage = styled.div`
 
 const ServiceDetails = () => {
   const [activeTab, setActiveTab] = useState('chatbots');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const openContactModal = (service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
   };
 
   return (
@@ -187,7 +195,7 @@ const ServiceDetails = () => {
                   <FeatureItem>Многоязычная поддержка для глобального охвата</FeatureItem>
                   <FeatureItem>Легкое масштабирование без дополнительных затрат на персонал</FeatureItem>
                 </FeaturesList>
-                <Button href="#contact">Заказать консультацию</Button>
+                <Button onClick={() => openContactModal('ИИ-бот для продаж')}>Заказать консультацию</Button>
               </TextContainer>
               <ImageContainer>
                 <PlaceholderImage>🤖</PlaceholderImage>
@@ -212,12 +220,18 @@ const ServiceDetails = () => {
                   <FeatureItem>Поиск информации и анализ данных</FeatureItem>
                   <FeatureItem>Автоматизация рутинных задач и управление проектами</FeatureItem>
                 </FeaturesList>
-                <Button href="#contact">Заказать разработку</Button>
+                <Button onClick={() => openContactModal('Персональный ИИ-ассистент')}>Заказать разработку</Button>
               </TextContainer>
             </FlexContainer>
           </TabContent>
         </ContentContainer>
       </Container>
+      
+      <ContactForm 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        service={selectedService}
+      />
     </ServiceDetailsSection>
   );
 };
