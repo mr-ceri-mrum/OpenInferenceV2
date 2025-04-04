@@ -32,47 +32,90 @@ const SolutionsMedia = styled.div`
   }
 `;
 
-// Контейнер в стиле телефона
+// Контейнер в стиле iPhone 15
 const PhoneContainer = styled.div`
   width: 100%;
   position: relative;
-  padding: 40px 10px;
-  border-radius: 36px;
+  padding: 15px 12px;
+  border-radius: 45px;
   background-color: #1a1a1a;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
   
+  /* Dynamic Island (выемка сверху) */
   &:before {
     content: '';
     position: absolute;
-    top: 18px;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
-    height: 10px;
-    background-color: #444;
-    border-radius: 10px;
+    height: 30px;
+    background-color: #111;
+    border-radius: 20px;
+    z-index: 2;
   }
   
+  /* Блик на рамке */
   &:after {
     content: '';
     position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    border: 2px solid #444;
-    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 45px;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.1);
+    pointer-events: none;
   }
+`;
+
+// Кнопки регулировки громкости и боковая кнопка
+const VolumeBtnUp = styled.div`
+  position: absolute;
+  left: -2px;
+  top: 120px;
+  width: 4px;
+  height: 30px;
+  background-color: #2a2a2a;
+  border-radius: 2px 0 0 2px;
+`;
+
+const VolumeBtnDown = styled.div`
+  position: absolute;
+  left: -2px;
+  top: 160px;
+  width: 4px;
+  height: 30px;
+  background-color: #2a2a2a;
+  border-radius: 2px 0 0 2px;
+`;
+
+const PowerBtn = styled.div`
+  position: absolute;
+  right: -2px;
+  top: 140px;
+  width: 4px;
+  height: 40px;
+  background-color: #2a2a2a;
+  border-radius: 0 2px 2px 0;
+`;
+
+// Изогнутый экран iPhone со скруглением углов
+const PhoneScreen = styled.div`
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 35px;
+  background-color: #000;
 `;
 
 const VideoContainer = styled.div`
   width: 100%;
-  border-radius: 6px;
   overflow: hidden;
   position: relative;
-  padding-top: 177.78%; /* Соотношение сторон 9:16 для вертикального видео как на телефоне */
-  background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+  padding-top: 200%; /* Более вытянутый экран для современного iPhone */
+  background: #000;
 `;
 
 const Video = styled.video`
@@ -82,6 +125,20 @@ const Video = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
+`;
+
+// UI элементы iPhone
+const HomeIndicator = styled.div`
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 5px;
+  background-color: white;
+  border-radius: 3px;
+  opacity: 0.6;
+  z-index: 10;
 `;
 
 const SolutionsText = styled.div`
@@ -158,9 +215,15 @@ const AISolutions = () => {
         <SolutionsContent>
           <SolutionsMedia>
             <PhoneContainer>
-              <VideoContainer>
-                <Video src={PreviewVideo} controls />
-              </VideoContainer>
+              <VolumeBtnUp />
+              <VolumeBtnDown />
+              <PowerBtn />
+              <PhoneScreen>
+                <VideoContainer>
+                  <Video src={PreviewVideo} controls />
+                  <HomeIndicator />
+                </VideoContainer>
+              </PhoneScreen>
             </PhoneContainer>
           </SolutionsMedia>
           
