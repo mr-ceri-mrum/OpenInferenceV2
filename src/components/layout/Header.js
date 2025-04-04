@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Container from '../common/Container';
 import Button from '../common/Button';
 import ContactForm from '../common/ContactForm';
+import ContactInfo from '../common/ContactInfo';
 import Logo from '../../assets/logo.svg';
 
 const HeaderWrapper = styled.header`
@@ -119,7 +120,8 @@ const HeaderButton = styled(Button)`
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [isContactInfoOpen, setIsContactInfoOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,9 +143,15 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const openContactModal = (e) => {
+  const openContactForm = (e) => {
     e.preventDefault();
-    setIsContactModalOpen(true);
+    setIsContactFormOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const openContactInfo = (e) => {
+    e.preventDefault();
+    setIsContactInfoOpen(true);
     setIsMenuOpen(false);
   };
 
@@ -179,20 +187,25 @@ const Header = () => {
                   <NavLink to="/#portfolio" onClick={() => setIsMenuOpen(false)}>Портфолио</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavButton onClick={openContactModal}>Контакты</NavButton>
+                  <NavButton onClick={openContactInfo}>Контакты</NavButton>
                 </NavItem>
               </NavList>
             </Nav>
             
-            <HeaderButton onClick={openContactModal}>Связаться с нами</HeaderButton>
+            <HeaderButton onClick={openContactForm}>Связаться с нами</HeaderButton>
           </HeaderContent>
         </Container>
       </HeaderWrapper>
 
       <ContactForm 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+        isOpen={isContactFormOpen} 
+        onClose={() => setIsContactFormOpen(false)} 
         service=""
+      />
+      
+      <ContactInfo 
+        isOpen={isContactInfoOpen} 
+        onClose={() => setIsContactInfoOpen(false)} 
       />
     </>
   );
