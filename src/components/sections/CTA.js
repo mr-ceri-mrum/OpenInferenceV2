@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
+import ContactModal from '../common/ContactModal';
 
 const CTASection = styled.section`
   padding: 80px 0;
@@ -34,20 +35,31 @@ const CTAButtons = styled.div`
 `;
 
 const CTA = () => {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
+  const openContactModal = (e) => {
+    e.preventDefault();
+    setIsContactModalOpen(true);
+  };
+
   return (
-    <CTASection>
-      <Container>
-        <Title>Готовы трансформировать ваш бизнес?</Title>
-        <Description>
-          Свяжитесь с нами, чтобы обсудить, как наши веб-решения и технологии ИИ 
-          могут помочь вашему бизнесу достичь новых высот.
-        </Description>
-        <CTAButtons>
-          <Button variant="secondary" href="#contact">Связаться с нами</Button>
-          <Button href="#services">Наши услуги</Button>
-        </CTAButtons>
-      </Container>
-    </CTASection>
+    <>
+      <CTASection>
+        <Container>
+          <Title>Готовы трансформировать ваш бизнес?</Title>
+          <Description>
+            Свяжитесь с нами, чтобы обсудить, как наши веб-решения и технологии ИИ 
+            могут помочь вашему бизнесу достичь новых высот.
+          </Description>
+          <CTAButtons>
+            <Button variant="secondary" onClick={openContactModal}>Связаться с нами</Button>
+            <Button href="#services">Наши услуги</Button>
+          </CTAButtons>
+        </Container>
+      </CTASection>
+      
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+    </>
   );
 };
 
