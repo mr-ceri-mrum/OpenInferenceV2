@@ -17,7 +17,7 @@ const SolutionsContent = styled.div`
   }
 `;
 
-const SolutionsImage = styled.div`
+const SolutionsMedia = styled.div`
   flex: 1;
   margin-right: 50px;
   
@@ -28,10 +28,39 @@ const SolutionsImage = styled.div`
   }
 `;
 
-const Image = styled.img`
-  max-width: 100%;
+const VideoContainer = styled.div`
+  width: 100%;
   border-radius: 10px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  position: relative;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+`;
+
+const VideoPlaceholder = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+`;
+
+const VideoIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 15px;
+`;
+
+const VideoText = styled.p`
+  font-size: 18px;
+  margin-bottom: 10px;
 `;
 
 const SolutionsText = styled.div`
@@ -102,13 +131,23 @@ const AISolutions = () => {
     }
   ];
 
+  // Video file path that will be replaced manually
+  const videoSource = "/path/to/ai-solutions-video.mp4";
+
   return (
     <SolutionsSection id="ai-solutions">
       <Container>
         <SolutionsContent>
-          <SolutionsImage>
-            <Image src="/api/placeholder/500/400" alt="ИИ-решения" />
-          </SolutionsImage>
+          <SolutionsMedia>
+            <VideoContainer>
+              <VideoPlaceholder>
+                <VideoIcon>▶️</VideoIcon>
+                <VideoText>Демонстрация ИИ-решений</VideoText>
+                <VideoText>Замените на ваше видео</VideoText>
+                <VideoText><code>{videoSource}</code></VideoText>
+              </VideoPlaceholder>
+            </VideoContainer>
+          </SolutionsMedia>
           
           <SolutionsText>
             <Title>Наши ИИ-решения для вашего бизнеса</Title>
