@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
+import PreviewVideo from '../../assets/previe.mp4';
 
 const SolutionsSection = styled.section`
   padding: 100px 0;
@@ -36,6 +37,15 @@ const VideoContainer = styled.div`
   position: relative;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+`;
+
+const Video = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const VideoPlaceholder = styled.div`
@@ -131,21 +141,13 @@ const AISolutions = () => {
     }
   ];
 
-  // Video file path that will be replaced manually
-  const videoSource = "/path/to/ai-solutions-video.mp4";
-
   return (
     <SolutionsSection id="ai-solutions">
       <Container>
         <SolutionsContent>
           <SolutionsMedia>
             <VideoContainer>
-              <VideoPlaceholder>
-                <VideoIcon>▶️</VideoIcon>
-                <VideoText>Демонстрация ИИ-решений</VideoText>
-                <VideoText>Замените на ваше видео</VideoText>
-                <VideoText><code>{videoSource}</code></VideoText>
-              </VideoPlaceholder>
+              <Video src={PreviewVideo} controls />
             </VideoContainer>
           </SolutionsMedia>
           
