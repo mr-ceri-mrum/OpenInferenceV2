@@ -21,21 +21,54 @@ const SolutionsContent = styled.div`
 const SolutionsMedia = styled.div`
   flex: 1;
   margin-right: 50px;
-  max-width: 368px; /* Ограничиваем максимальную ширину как у телефона */
+  max-width: 350px;
   
   @media (max-width: 992px) {
     margin-right: 0;
     margin-bottom: 40px;
     width: 100%;
-    max-width: 368px;
+    max-width: 350px;
     margin: 0 auto 40px;
+  }
+`;
+
+// Контейнер в стиле телефона
+const PhoneContainer = styled.div`
+  width: 100%;
+  position: relative;
+  padding: 40px 10px;
+  border-radius: 36px;
+  background-color: #1a1a1a;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 10px;
+    background-color: #444;
+    border-radius: 10px;
+  }
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border: 2px solid #444;
+    border-radius: 50%;
   }
 `;
 
 const VideoContainer = styled.div`
   width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
   padding-top: 177.78%; /* Соотношение сторон 9:16 для вертикального видео как на телефоне */
@@ -124,9 +157,11 @@ const AISolutions = () => {
       <Container>
         <SolutionsContent>
           <SolutionsMedia>
-            <VideoContainer>
-              <Video src={PreviewVideo} controls />
-            </VideoContainer>
+            <PhoneContainer>
+              <VideoContainer>
+                <Video src={PreviewVideo} controls />
+              </VideoContainer>
+            </PhoneContainer>
           </SolutionsMedia>
           
           <SolutionsText>
