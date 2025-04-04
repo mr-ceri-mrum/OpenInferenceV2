@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Container from '../common/Container';
 import Button from '../common/Button';
-import ContactModal from '../common/ContactModal';
+import ContactForm from '../common/ContactForm';
 import Logo from '../../assets/logo.svg';
 
 const HeaderWrapper = styled.header`
@@ -189,7 +189,11 @@ const Header = () => {
         </Container>
       </HeaderWrapper>
 
-      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+      <ContactForm 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)} 
+        service=""
+      />
     </>
   );
 };
