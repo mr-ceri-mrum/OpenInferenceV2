@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Container from '../common/Container';
 import Button from '../common/Button';
+import ContactModal from '../common/ContactModal';
 import Logo from '../../assets/logo.svg';
 
 const HeaderWrapper = styled.header`
@@ -81,6 +82,22 @@ const NavLink = styled(Link)`
   }
 `;
 
+const NavButton = styled.button`
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  color: var(--dark-blue);
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 0;
+  
+  &:hover {
+    color: var(--primary-purple);
+  }
+`;
+
 const MobileMenuButton = styled.button`
   display: none;
   background: none;
@@ -102,6 +119,7 @@ const HeaderButton = styled(Button)`
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,46 +141,56 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const openContactModal = (e) => {
+    e.preventDefault();
+    setIsContactModalOpen(true);
+    setIsMenuOpen(false);
+  };
+
   return (
-    <HeaderWrapper style={{ 
-      boxShadow: isScrolled ? '0 4px 20px rgba(0, 0, 0, 0.15)' : '0 2px 10px rgba(0, 0, 0, 0.1)',
-      transition: 'box-shadow 0.3s ease'
-    }}>
-      <Container>
-        <HeaderContent>
-          <LogoWrapper>
-            <LogoImage src={Logo} alt="Open Inference Logo" />
-            <LogoText>Open Inference</LogoText>
-          </LogoWrapper>
-          
-          <MobileMenuButton onClick={toggleMenu}>
-            {isMenuOpen ? '✕' : '☰'}
-          </MobileMenuButton>
-          
-          <Nav isOpen={isMenuOpen}>
-            <NavList>
-              <NavItem>
-                <NavLink to="/#services" onClick={() => setIsMenuOpen(false)}>Услуги</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#ai-solutions" onClick={() => setIsMenuOpen(false)}>ИИ-решения</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#about" onClick={() => setIsMenuOpen(false)}>О нас</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#portfolio" onClick={() => setIsMenuOpen(false)}>Портфолио</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/#contact" onClick={() => setIsMenuOpen(false)}>Контакты</NavLink>
-              </NavItem>
-            </NavList>
-          </Nav>
-          
-          <HeaderButton href="#contact">Связаться с нами</HeaderButton>
-        </HeaderContent>
-      </Container>
-    </HeaderWrapper>
+    <>
+      <HeaderWrapper style={{ 
+        boxShadow: isScrolled ? '0 4px 20px rgba(0, 0, 0, 0.15)' : '0 2px 10px rgba(0, 0, 0, 0.1)',
+        transition: 'box-shadow 0.3s ease'
+      }}>
+        <Container>
+          <HeaderContent>
+            <LogoWrapper>
+              <LogoImage src={Logo} alt="Open Inference Logo" />
+              <LogoText>Open Inference</LogoText>
+            </LogoWrapper>
+            
+            <MobileMenuButton onClick={toggleMenu}>
+              {isMenuOpen ? '✕' : '☰'}
+            </MobileMenuButton>
+            
+            <Nav isOpen={isMenuOpen}>
+              <NavList>
+                <NavItem>
+                  <NavLink to="/#services" onClick={() => setIsMenuOpen(false)}>Услуги</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/#ai-solutions" onClick={() => setIsMenuOpen(false)}>ИИ-решения</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/#about" onClick={() => setIsMenuOpen(false)}>О нас</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/#portfolio" onClick={() => setIsMenuOpen(false)}>Портфолио</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavButton onClick={openContactModal}>Контакты</NavButton>
+                </NavItem>
+              </NavList>
+            </Nav>
+            
+            <HeaderButton onClick={openContactModal}>Связаться с нами</HeaderButton>
+          </HeaderContent>
+        </Container>
+      </HeaderWrapper>
+
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+    </>
   );
 };
 
