@@ -124,7 +124,9 @@ const Video = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* изменено с cover на contain для отображения всего содержимого */
+  object-position: center; /* центрировать видео */
+  padding: 0 4px; /* небольшой отступ для предотвращения обрезки текста по краям */
 `;
 
 // UI элементы iPhone
