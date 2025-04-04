@@ -37,6 +37,14 @@ npm start
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
 
+## 🎬 Adding Your Video
+
+The AI Solutions section contains a placeholder for a video file. To add your own video:
+
+1. Place your video file in the `public` directory (for example: `public/videos/ai-solutions.mp4`)
+2. Open the file `src/components/sections/AISolutions.js`
+3. Update the `videoSource` variable with the correct path to your video (e.g., `/videos/ai-solutions.mp4`)
+
 ## 🏗️ Project Structure
 
 ```
