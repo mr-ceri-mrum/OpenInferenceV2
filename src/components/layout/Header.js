@@ -167,7 +167,7 @@ const Header = () => {
             <Nav isOpen={isMenuOpen}>
               <NavList>
                 <NavItem>
-                  <NavLink to="/#services" onClick={() => setIsMenuOpen(false)}>Услуги</NavLink>
+                  <NavLink to="/services" onClick={() => setIsMenuOpen(false)}>Услуги</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink to="/#ai-solutions" onClick={() => setIsMenuOpen(false)}>ИИ-решения</NavLink>
