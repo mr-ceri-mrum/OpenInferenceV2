@@ -333,15 +333,15 @@ const ChatDemo = () => {
       if (!response.ok) {
         throw new Error('Не удалось получить ответ от сервера');
       }
-
-      const data = await response.json();
       
+      const data = await response.json();
+      console.log(data)
       // Добавляем ответ бота после небольшой задержки
       setTimeout(() => {
         setIsTyping(false);
         setMessages(prev => [...prev, {
           sender: 'bot',
-          text: data.response || 'Извините, я не смог обработать ваш запрос',
+          text: data.n8n_response.output ,
           buttons: data.buttons || [],
           isNew: true
         }]);
