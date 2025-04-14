@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import Container from '../common/Container';
 
@@ -239,19 +239,8 @@ const ChatDemo = () => {
   const chatBodyRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    // При первом рендеринге показываем приветственное сообщение
-    resetChat();
-  }, [activeTab]);
-
-  useEffect(() => {
-    // Прокручиваем чат вниз при добавлении новых сообщений
-    if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const resetChat = async () => {
+  // Используем useCallback для мемоизации функции resetChat
+  const resetChat = useCallback(async () => {
     setMessages([]);
     setInputValue('');
     setError(null);
@@ -299,7 +288,19 @@ const ChatDemo = () => {
         isNew: true
       }]);
     }
-  };
+  }, [activeTab]); // Указываем зависимость от activeTab
+
+  useEffect(() => {
+    // При первом рендеринге или изменении activeTab показываем приветственное сообщение
+    resetChat();
+  }, [activeTab, resetChat]); // Добавляем resetChat в массив зависимостей
+
+  useEffect(() => {
+    // Прокручиваем чат вниз при добавлении новых сообщений
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const sendMessage = async (text) => {
     if (!text.trim()) return;
