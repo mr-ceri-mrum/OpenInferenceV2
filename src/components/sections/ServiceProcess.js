@@ -48,7 +48,7 @@ const ProcessTimeline = styled.div`
 
 const ProcessStep = styled.div`
   display: flex;
-  justify-content: ${props => props.isEven ? 'flex-start' : 'flex-end'};
+  justify-content: ${props => props.$isEven ? 'flex-start' : 'flex-end'};
   margin-bottom: 60px;
   position: relative;
   
@@ -84,7 +84,7 @@ const StepContent = styled.div`
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     
-    ${props => props.isEven 
+    ${props => props.$isEven 
       ? 'right: -20px; border-left: 20px solid var(--light-gray);' 
       : 'left: -20px; border-right: 20px solid var(--light-gray);'
     }
@@ -100,7 +100,7 @@ const StepContent = styled.div`
 const StepNumber = styled.div`
   position: absolute;
   top: 20px;
-  ${props => props.isEven ? 'left: calc(45% + 50px);' : 'right: calc(45% + 50px);'}
+  ${props => props.$isEven ? 'left: calc(45% + 50px);' : 'right: calc(45% + 50px);'}
   width: 40px;
   height: 40px;
   background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
@@ -177,9 +177,9 @@ const ServiceProcess = () => {
         
         <ProcessTimeline>
           {processSteps.map(step => (
-            <ProcessStep key={step.id} isEven={step.id % 2 === 0}>
-              <StepNumber isEven={step.id % 2 === 0}>{step.id}</StepNumber>
-              <StepContent isEven={step.id % 2 === 0}>
+            <ProcessStep key={step.id} $isEven={step.id % 2 === 0}>
+              <StepNumber $isEven={step.id % 2 === 0}>{step.id}</StepNumber>
+              <StepContent $isEven={step.id % 2 === 0}>
                 <StepTitle>{step.title}</StepTitle>
                 <StepDescription>{step.description}</StepDescription>
               </StepContent>
