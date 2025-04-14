@@ -149,6 +149,7 @@ const MessageText = styled.p`
   margin: 0;
   color: var(--dark-blue);
   line-height: 1.5;
+  white-space: pre-wrap;
 `;
 
 const QuestionButtons = styled.div`
@@ -214,96 +215,163 @@ const ChatSendButton = styled.button`
   }
 `;
 
+const ErrorMessage = styled.div`
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+`;
+
+const defaultButtons = [
+  'Расскажи о компании',
+  'Какие услуги вы предлагаете?',
+  'Как связаться с менеджером?'
+];
+
 const ChatDemo = () => {
-  const [activeTab, setActiveTab] = useState('shoes');
+  const [activeTab, setActiveTab] = useState('live-chat');
   const [messages, setMessages] = useState([]);
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState(null);
   const chatBodyRef = useRef(null);
-
-  const shoesScenario = [
-    { sender: 'bot', text: 'Привет! Я виртуальный консультант магазина кроссовок Sneakers Hub. Как я могу помочь вам сегодня?', buttons: ['Хочу выбрать кроссовки', 'Расскажи о брендах', 'Есть ли скидки?'] },
-    { sender: 'user', text: 'Хочу выбрать кроссовки' },
-    { sender: 'bot', text: 'Отлично! Для каких целей вам нужны кроссовки?', buttons: ['Для бега', 'Для повседневной носки', 'Для тренировок в зале'] },
-    { sender: 'user', text: 'Для бега' },
-    { sender: 'bot', text: 'Хороший выбор! У нас есть отличные беговые модели. Какой у вас бюджет?', buttons: ['До 10000 тенге', '10000-30000 тенге', 'Более 30000 тенге'] },
-    { sender: 'user', text: '10000-30000 тенге' },
-    { sender: 'bot', text: 'Замечательно! Порекомендую несколько вариантов в вашем бюджете. Какой размер обуви вы носите?', buttons: ['41', '42', '43', 'Другой'] },
-    { sender: 'user', text: '42' },
-    { sender: 'bot', text: 'Отлично! Вот несколько рекомендаций для вас:\n\n1. Nike Air Zoom Pegasus 38 - 25 900 тенге\n2. Adidas Supernova - 23 500 тенге\n3. Puma Velocity Nitro - 22 800 тенге\n\nВсе модели доступны в размере 42 и идеально подходят для бега. Какая из них вас заинтересовала?', buttons: ['Nike Air Zoom Pegasus 38', 'Adidas Supernova', 'Puma Velocity Nitro', 'Показать еще'] },
-    { sender: 'user', text: 'Nike Air Zoom Pegasus 38' },
-    { sender: 'bot', text: 'Отличный выбор! Nike Air Zoom Pegasus 38 — это легкие и отзывчивые беговые кроссовки с амортизацией Zoom Air, которая обеспечивает мягкость и упругость при каждом шаге. Они доступны в нескольких цветах. Какой цвет вы предпочитаете?', buttons: ['Черный', 'Белый', 'Синий', 'Показать все цвета'] },
-    { sender: 'user', text: 'Черный' },
-    { sender: 'bot', text: 'Супер! Nike Air Zoom Pegasus 38 в черном цвете отлично смотрится и прекрасно подойдет для любого наряда. Хотите оформить заказ или у вас есть дополнительные вопросы?', buttons: ['Оформить заказ', 'Есть ли в наличии сейчас?', 'Можно ли примерить?'] },
-    { sender: 'user', text: 'Оформить заказ' },
-    { sender: 'bot', text: 'Отлично! Я подготовил вашу корзину с Nike Air Zoom Pegasus 38, черного цвета, размер 42, цена 25 900 тенге. Для оформления заказа, пожалуйста, перейдите к оплате. Спасибо за выбор Sneakers Hub! 😊', buttons: ['Перейти к оплате', 'Вернуться в каталог'] }
-  ];
-
-  const assistantScenario = [
-    { sender: 'bot', text: 'Привет! Я ваш персональный ИИ-ассистент Джарвис. Чем могу помочь вам сегодня?', buttons: ['Планирование дня', 'Напомнить о встрече', 'Управление умным домом'] },
-    { sender: 'user', text: 'Планирование дня' },
-    { sender: 'bot', text: 'С удовольствием помогу вам спланировать день. Какой сегодня день у вас запланирован?', buttons: ['Рабочий день', 'Выходной', 'Смешанный'] },
-    { sender: 'user', text: 'Рабочий день' },
-    { sender: 'bot', text: 'Понятно. Я проверил ваш календарь на сегодня. У вас запланированы следующие встречи:\n\n9:00 - Командный митинг\n12:30 - Обед с клиентом\n15:00 - Презентация проекта\n\nХотите, чтобы я внес изменения или добавил что-то в ваше расписание?', buttons: ['Добавить задачу', 'Перенести встречу', 'Напомнить о встрече'] },
-    { sender: 'user', text: 'Добавить задачу' },
-    { sender: 'bot', text: 'Конечно! Какую задачу вы хотите добавить в свое расписание?', buttons: ['Спортзал после работы', 'Купить продукты', 'Позвонить родителям'] },
-    { sender: 'user', text: 'Спортзал после работы' },
-    { sender: 'bot', text: 'В какое время вы хотели бы запланировать посещение спортзала?', buttons: ['18:00', '19:00', '20:00'] },
-    { sender: 'user', text: '18:00' },
-    { sender: 'bot', text: 'Добавил в ваше расписание "Спортзал" на 18:00. Ваше обновленное расписание на сегодня:\n\n9:00 - Командный митинг\n12:30 - Обед с клиентом\n15:00 - Презентация проекта\n18:00 - Спортзал\n\nХотите, чтобы я установил напоминания?', buttons: ['Да, за 30 минут', 'Да, за 1 час', 'Нет, спасибо'] },
-    { sender: 'user', text: 'Да, за 30 минут' },
-    { sender: 'bot', text: 'Отлично! Я установил напоминания за 30 минут до каждого события. Обратите внимание, что дорога до спортзала в это время может занять около 25 минут из-за пробок. Хотите, чтобы я проложил оптимальный маршрут?', buttons: ['Да, пожалуйста', 'Нет, я знаю дорогу'] },
-    { sender: 'user', text: 'Да, пожалуйста' },
-    { sender: 'bot', text: 'Я проложил оптимальный маршрут от вашего офиса до спортзала. В 17:30 я отправлю вам уведомление с картой и текущей ситуацией на дорогах. Что-нибудь еще, чем я могу помочь вам сегодня?', buttons: ['Включить кондиционер дома к приходу', 'Заказать такси', 'Нет, спасибо'] },
-    { sender: 'user', text: 'Включить кондиционер дома к приходу' },
-    { sender: 'bot', text: 'Я настрою ваш умный дом так, чтобы кондиционер включился в 19:30, к вашему приходу из спортзала. Какую температуру установить?', buttons: ['22°C', '24°C', '20°C'] },
-    { sender: 'user', text: '22°C' },
-    { sender: 'bot', text: 'Готово! Кондиционер включится в 19:30 и установит температуру 22°C. Также я включу приглушенное освещение в гостиной для создания комфортной атмосферы после тренировки. Что-нибудь еще?', buttons: ['Нет, спасибо', 'Приготовить кофе к приходу', 'Включить музыку'] },
-    { sender: 'user', text: 'Нет, спасибо' },
-    { sender: 'bot', text: 'Отлично! Ваш день спланирован. Я буду держать вас в курсе всех событий и помогу организовать день максимально эффективно. Хорошего вам дня! 😊', buttons: ['Спасибо, Джарвис!', 'Показать мое расписание еще раз'] }
-  ];
+  const inputRef = useRef(null);
 
   useEffect(() => {
+    // При первом рендеринге показываем приветственное сообщение
     resetChat();
   }, [activeTab]);
 
   useEffect(() => {
+    // Прокручиваем чат вниз при добавлении новых сообщений
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const resetChat = () => {
+  const resetChat = async () => {
     setMessages([]);
-    setCurrentMessageIndex(0);
+    setInputValue('');
+    setError(null);
+    setIsTyping(true);
+
+    try {
+      // Получаем приветственное сообщение от API
+      const response = await fetch('http://127.0.0.1:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Привет',
+          isInitial: true,
+          type: activeTab === 'live-chat' ? 'bot' : 'assistant'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Не удалось получить ответ от сервера');
+      }
+
+      const data = await response.json();
+      
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages([{
+          sender: 'bot',
+          text: data.response || 'Привет! Чем я могу помочь вам сегодня?',
+          buttons: data.buttons || defaultButtons,
+          isNew: true
+        }]);
+      }, 1000);
+    } catch (err) {
+      console.error('Ошибка при запросе к API:', err);
+      setIsTyping(false);
+      setError('Не удалось подключиться к серверу. Пожалуйста, проверьте соединение.');
+      
+      // Показываем дефолтное сообщение в случае ошибки
+      setMessages([{
+        sender: 'bot',
+        text: 'Привет! Я виртуальный ассистент. Чем могу помочь вам сегодня?',
+        buttons: defaultButtons,
+        isNew: true
+      }]);
+    }
+  };
+
+  const sendMessage = async (text) => {
+    if (!text.trim()) return;
     
-    // Добавляем первое сообщение от бота
-    const scenario = activeTab === 'shoes' ? shoesScenario : assistantScenario;
-    setTimeout(() => {
-      setMessages([scenario[0]]);
-      setCurrentMessageIndex(1);
-    }, 500);
+    // Добавляем сообщение пользователя
+    const userMessage = { sender: 'user', text, isNew: true };
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    
+    // Показываем "печатает..."
+    setIsTyping(true);
+    
+    try {
+      // Отправляем сообщение на API
+      const response = await fetch('http://127.0.0.1:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: text,
+          type: activeTab === 'live-chat' ? 'bot' : 'assistant',
+          history: messages.map(msg => ({
+            role: msg.sender === 'bot' ? 'assistant' : 'user',
+            content: msg.text
+          }))
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Не удалось получить ответ от сервера');
+      }
+
+      const data = await response.json();
+      
+      // Добавляем ответ бота после небольшой задержки
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [...prev, {
+          sender: 'bot',
+          text: data.response || 'Извините, я не смог обработать ваш запрос',
+          buttons: data.buttons || [],
+          isNew: true
+        }]);
+      }, 1500);
+    } catch (err) {
+      console.error('Ошибка при отправке сообщения:', err);
+      setIsTyping(false);
+      setMessages(prev => [...prev, {
+        sender: 'bot',
+        text: 'Извините, произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте еще раз.',
+        isNew: true
+      }]);
+    }
   };
 
   const handleButtonClick = (text) => {
-    const scenario = activeTab === 'shoes' ? shoesScenario : assistantScenario;
-    
-    if (currentMessageIndex < scenario.length) {
-      // Добавляем сообщение пользователя
-      setMessages(prev => [...prev, { sender: 'user', text, isNew: true }]);
-      
-      // Показываем "печатает..."
-      setIsTyping(true);
-      
-      // Добавляем ответ бота через задержку
-      setTimeout(() => {
-        setIsTyping(false);
-        if (currentMessageIndex < scenario.length) {
-          setMessages(prev => [...prev, { ...scenario[currentMessageIndex], isNew: true }]);
-          setCurrentMessageIndex(currentMessageIndex + 1);
-        }
-      }, 1500);
+    sendMessage(text);
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage(inputValue);
     }
+  };
+
+  const handleSendClick = () => {
+    sendMessage(inputValue);
   };
 
   return (
@@ -318,8 +386,8 @@ const ChatDemo = () => {
         
         <TabsContainer>
           <TabButton 
-            active={activeTab === 'shoes'} 
-            onClick={() => setActiveTab('shoes')}
+            active={activeTab === 'live-chat'} 
+            onClick={() => setActiveTab('live-chat')}
           >
             ИИ бот для магазина
           </TabButton>
@@ -334,16 +402,18 @@ const ChatDemo = () => {
         <ChatContainer>
           <ChatHeader>
             <ChatHeaderTitle>
-              {activeTab === 'shoes' ? 'Чат с ботом Sneakers Hub' : 'Чат с ассистентом Джарвис'}
+              {activeTab === 'live-chat' ? 'Чат с ботом Sneakers Hub' : 'Чат с ассистентом Джарвис'}
             </ChatHeaderTitle>
           </ChatHeader>
           
           <ChatBody ref={chatBodyRef}>
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            
             {messages.map((msg, index) => (
               <Message key={index} isNew={msg.isNew}>
                 {msg.sender === 'bot' ? (
                   <BotAvatar>
-                    <BotIcon>{activeTab === 'shoes' ? '👟' : '🤖'}</BotIcon>
+                    <BotIcon>{activeTab === 'live-chat' ? '👟' : '🤖'}</BotIcon>
                   </BotAvatar>
                 ) : (
                   <UserAvatar>
@@ -354,7 +424,7 @@ const ChatDemo = () => {
                 <MessageContent isUser={msg.sender === 'user'}>
                   <MessageText>{msg.text}</MessageText>
                   
-                  {msg.buttons && (
+                  {msg.buttons && msg.buttons.length > 0 && (
                     <QuestionButtons>
                       {msg.buttons.map((btn, btnIndex) => (
                         <QuestionButton 
@@ -373,7 +443,7 @@ const ChatDemo = () => {
             {isTyping && (
               <Message>
                 <BotAvatar>
-                  <BotIcon>{activeTab === 'shoes' ? '👟' : '🤖'}</BotIcon>
+                  <BotIcon>{activeTab === 'live-chat' ? '👟' : '🤖'}</BotIcon>
                 </BotAvatar>
                 <MessageContent>
                   <MessageText>печатает...</MessageText>
@@ -384,10 +454,13 @@ const ChatDemo = () => {
           
           <ChatFooter>
             <ChatInput 
+              ref={inputRef}
               placeholder="Введите сообщение..." 
-              disabled
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleInputKeyDown}
             />
-            <ChatSendButton>
+            <ChatSendButton onClick={handleSendClick}>
               ➤
             </ChatSendButton>
           </ChatFooter>
