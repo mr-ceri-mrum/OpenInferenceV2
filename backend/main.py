@@ -1,8 +1,23 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
-
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # React
+    # Можно добавить другие, например продакшн-домен
+]
+
+app.add_middleware(
+    CORSMiddleware,  # The middleware class is the first positional argument
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # You'll likely want to allow specific HTTP methods
+    allow_headers=["*"],  # You'll likely want to allow specific headers
+)
+
 
 # Модель входящего запроса
 class ChatRequest(BaseModel):
