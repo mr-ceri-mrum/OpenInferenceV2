@@ -42,7 +42,7 @@ const LogoText = styled.h1`
 
 const Nav = styled.nav`
   @media (max-width: 768px) {
-    display: ${props => (props.isOpen ? 'flex' : 'none')};
+    display: ${props => (props.$isOpen ? 'flex' : 'none')};
     flex-direction: column;
     position: absolute;
     top: 100%;
@@ -173,7 +173,7 @@ const Header = () => {
               {isMenuOpen ? '✕' : '☰'}
             </MobileMenuButton>
             
-            <Nav isOpen={isMenuOpen}>
+            <Nav $isOpen={isMenuOpen}>
               <NavList>
                 <NavItem>
                   <NavLink to="/services" onClick={() => setIsMenuOpen(false)}>Услуги</NavLink>
