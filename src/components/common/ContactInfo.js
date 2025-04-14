@@ -8,7 +8,7 @@ const Modal = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: ${props => (props.isOpen ? 'flex' : 'none')};
+  display: ${props => (props.$isOpen ? 'flex' : 'none')};
   justify-content: center;
   align-items: center;
   z-index: 1500;
@@ -100,8 +100,8 @@ const SocialWrapper = styled.div`
 const SocialLink = styled.a`
   width: 40px;
   height: 40px;
-  background-color: ${props => props.bg || '#f0f3ff'};
-  color: ${props => props.color || 'var(--dark-blue)'};
+  background-color: ${props => props.$bg || '#f0f3ff'};
+  color: ${props => props.$color || 'var(--dark-blue)'};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -118,7 +118,7 @@ const SocialLink = styled.a`
 
 const ContactInfo = ({ isOpen, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClick={onClose}>
+    <Modal $isOpen={isOpen} onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>✕</CloseButton>
         <Title>Связаться с нами</Title>
@@ -160,11 +160,11 @@ const ContactInfo = ({ isOpen, onClose }) => {
           <ContactText>
             <ContactLabel>Социальные сети</ContactLabel>
             <SocialWrapper>
-              <SocialLink href="#" bg="#3b5998" color="#fff">f</SocialLink>
-              <SocialLink href="#" bg="#1da1f2" color="#fff">t</SocialLink>
-              <SocialLink href="#" bg="#0077b5" color="#fff">in</SocialLink>
-              <SocialLink href="#" bg="#e1306c" color="#fff">ig</SocialLink>
-              <SocialLink href="#" bg="#0088cc" color="#fff">tg</SocialLink>
+              <SocialLink href="#" $bg="#3b5998" $color="#fff">f</SocialLink>
+              <SocialLink href="#" $bg="#1da1f2" $color="#fff">t</SocialLink>
+              <SocialLink href="#" $bg="#0077b5" $color="#fff">in</SocialLink>
+              <SocialLink href="#" $bg="#e1306c" $color="#fff">ig</SocialLink>
+              <SocialLink href="#" $bg="#0088cc" $color="#fff">tg</SocialLink>
             </SocialWrapper>
           </ContactText>
         </ContactItem>

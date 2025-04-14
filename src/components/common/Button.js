@@ -21,12 +21,12 @@ const StyledButton = styled.a`
   transition: var(--transition);
   text-align: center;
   
-  ${props => ButtonStyles[props.variant || 'primary']}
+  ${props => ButtonStyles[props.$variant || 'primary']}
   
   &:hover {
     transform: translateY(-3px);
     box-shadow: ${props => 
-      props.variant === 'secondary' 
+      props.$variant === 'secondary' 
         ? '0 10px 20px rgba(255, 255, 255, 0.3)'
         : '0 10px 20px rgba(123, 47, 247, 0.3)'
     };
@@ -36,7 +36,7 @@ const StyledButton = styled.a`
 const Button = ({ children, variant, href, onClick, className }) => {
   return (
     <StyledButton 
-      variant={variant} 
+      $variant={variant} 
       href={href} 
       onClick={onClick}
       className={className}

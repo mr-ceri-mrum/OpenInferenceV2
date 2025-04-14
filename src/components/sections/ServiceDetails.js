@@ -39,9 +39,9 @@ const TabsContainer = styled.div`
 `;
 
 const TabButton = styled.button`
-  background: ${props => props.active ? 'linear-gradient(135deg, var(--primary-blue), var(--primary-purple))' : 'var(--white)'};
-  color: ${props => props.active ? 'var(--white)' : 'var(--dark-blue)'};
-  border: 2px solid ${props => props.active ? 'transparent' : '#e1e1e1'};
+  background: ${props => props.$active ? 'linear-gradient(135deg, var(--primary-blue), var(--primary-purple))' : 'var(--white)'};
+  color: ${props => props.$active ? 'var(--white)' : 'var(--dark-blue)'};
+  border: 2px solid ${props => props.$active ? 'transparent' : '#e1e1e1'};
   border-radius: 30px;
   padding: 12px 30px;
   font-size: 16px;
@@ -51,7 +51,7 @@ const TabButton = styled.button`
   transition: var(--transition);
   
   &:hover {
-    background: ${props => props.active ? 'linear-gradient(135deg, var(--primary-blue), var(--primary-purple))' : '#f5f5f5'};
+    background: ${props => props.$active ? 'linear-gradient(135deg, var(--primary-blue), var(--primary-purple))' : '#f5f5f5'};
   }
   
   @media (max-width: 768px) {
@@ -66,7 +66,7 @@ const ContentContainer = styled.div`
 `;
 
 const TabContent = styled.div`
-  display: ${props => props.active ? 'block' : 'none'};
+  display: ${props => props.$active ? 'block' : 'none'};
 `;
 
 const FlexContainer = styled.div`
@@ -85,7 +85,7 @@ const ImageContainer = styled.div`
   
   @media (max-width: 992px) {
     margin-bottom: 30px;
-    order: ${props => props.reverse ? 2 : 1};
+    order: ${props => props.$reverse ? 2 : 1};
   }
 `;
 
@@ -94,7 +94,7 @@ const TextContainer = styled.div`
   padding: 0 20px;
   
   @media (max-width: 992px) {
-    order: ${props => props.reverse ? 1 : 2};
+    order: ${props => props.$reverse ? 1 : 2};
   }
 `;
 
@@ -167,13 +167,13 @@ const ServiceDetails = () => {
         
         <TabsContainer>
           <TabButton 
-            active={activeTab === 'chatbots'} 
+            $active={activeTab === 'chatbots'} 
             onClick={() => handleTabChange('chatbots')}
           >
             ИИ боты для продаж
           </TabButton>
           <TabButton 
-            active={activeTab === 'assistants'} 
+            $active={activeTab === 'assistants'} 
             onClick={() => handleTabChange('assistants')}
           >
             Персональные ИИ ассистенты
@@ -181,7 +181,7 @@ const ServiceDetails = () => {
         </TabsContainer>
         
         <ContentContainer>
-          <TabContent active={activeTab === 'chatbots'}>
+          <TabContent $active={activeTab === 'chatbots'}>
             <FlexContainer>
               <TextContainer>
                 <ContentTitle>ИИ-боты для автоматизации продаж и консультаций</ContentTitle>
@@ -203,12 +203,12 @@ const ServiceDetails = () => {
             </FlexContainer>
           </TabContent>
           
-          <TabContent active={activeTab === 'assistants'}>
+          <TabContent $active={activeTab === 'assistants'}>
             <FlexContainer>
-              <ImageContainer reverse>
+              <ImageContainer $reverse>
                 <PlaceholderImage>🧠</PlaceholderImage>
               </ImageContainer>
-              <TextContainer reverse>
+              <TextContainer $reverse>
                 <ContentTitle>Персональные ИИ-ассистенты (как Джарвис)</ContentTitle>
                 <Description>
                   Представьте себе интеллектуального помощника, который понимает ваши потребности и предпочтения, помогает в решении повседневных задач и эффективно управляет вашим расписанием. Наши персональные ИИ-ассистенты созданы для того, чтобы сделать вашу жизнь проще и эффективнее.
