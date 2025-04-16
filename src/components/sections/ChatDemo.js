@@ -253,8 +253,9 @@ const ChatDemo = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify({
-          message: 'Привет',
+          message: 'Привет ',
           isInitial: true,
           type: activeTab === 'live-chat' ? 'bot' : 'assistant'
         }),
