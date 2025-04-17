@@ -29,8 +29,8 @@ const LogoWrapper = styled(Link)`
 `;
 
 const LogoImage = styled.img`
-  width: 60px;
-  height: 80px;
+  width: 100px;
+  height: 120px;
   margin-right: 10px;
 `;
 
