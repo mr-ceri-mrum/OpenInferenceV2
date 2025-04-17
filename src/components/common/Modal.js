@@ -12,8 +12,8 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  opacity: ${props => (props.isOpen ? '1' : '0')};
-  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
+  opacity: ${props => (props.$isOpen ? '1' : '0')};
+  visibility: ${props => (props.$isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.3s ease, visibility 0.3s ease;
 `;
 
@@ -24,7 +24,7 @@ const ModalContainer = styled.div`
   max-width: 500px;
   width: 90%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: ${props => (props.isOpen ? 'translateY(0)' : 'translateY(-20px)')};
+  transform: ${props => (props.$isOpen ? 'translateY(0)' : 'translateY(-20px)')};
   transition: transform 0.3s ease;
   position: relative;
 `;
@@ -78,8 +78,8 @@ const Modal = ({ isOpen, onClose, children }) => {
   };
 
   return (
-    <ModalOverlay isOpen={isOpen} onClick={onClose}>
-      <ModalContainer isOpen={isOpen} onClick={handleModalClick}>
+    <ModalOverlay $isOpen={isOpen} onClick={onClose}>
+      <ModalContainer $isOpen={isOpen} onClick={handleModalClick}>
         <CloseButton onClick={onClose}>×</CloseButton>
         {children}
       </ModalContainer>
