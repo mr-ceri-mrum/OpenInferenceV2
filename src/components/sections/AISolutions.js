@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Container from '../common/Container';
 import Button from '../common/Button';
 import ContactModal from '../common/ContactModal';
-import PreviewVideo from '../../assets/previe.mp4';
+// Убираем импорт отсутствующего видео
+// import PreviewVideo from '../../assets/previe.mp4';
 
 const SolutionsSection = styled.section`
   padding: 100px 0;
@@ -103,17 +104,37 @@ const VideoContainer = styled.div`
   position: relative;
   padding-top: 215%; /* Соотношение сторон для соответствия видео */
   background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36px;
 `;
 
-const Video = styled.video`
+// Заменяем видео на заглушку
+const VideoPlaceholder = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* показывает все содержимое полностью */
-  object-position: center; /* центрирует видео */
-  padding: 0 4px; /* небольшой отступ для предотвращения обрезки текста по краям */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 20px;
+`;
+
+const PlaceholderIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 20px;
+`;
+
+const PlaceholderText = styled.div`
+  font-size: 16px;
+  opacity: 0.8;
 `;
 
 // UI элементы iPhone
@@ -217,7 +238,11 @@ const AISolutions = () => {
                 <PowerBtn />
                 <PhoneScreen>
                   <VideoContainer>
-                    <Video src={PreviewVideo} controls />
+                    {/* Заменяем видео на заглушку */}
+                    <VideoPlaceholder>
+                      <PlaceholderIcon>🤖</PlaceholderIcon>
+                      <PlaceholderText>ИИ ассистент<br />Open Inference</PlaceholderText>
+                    </VideoPlaceholder>
                     <HomeIndicator />
                   </VideoContainer>
                 </PhoneScreen>
