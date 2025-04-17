@@ -5,7 +5,7 @@ import Container from '../common/Container';
 import Button from '../common/Button';
 import ContactForm from '../common/ContactForm';
 import ContactInfo from '../common/ContactInfo';
-import Logo from '../../assets/logo.svg';
+import Logo from '../../assets/oi2.png';
 
 const HeaderWrapper = styled.header`
   background-color: var(--white);
@@ -29,8 +29,8 @@ const LogoWrapper = styled(Link)`
 `;
 
 const LogoImage = styled.img`
-  width: 50px;
-  height: auto;
+  width: 60px;
+  height: 80px;
   margin-right: 10px;
 `;
 
@@ -166,7 +166,7 @@ const Header = () => {
           <HeaderContent>
             <LogoWrapper to="/">
               <LogoImage src={Logo} alt="Open Inference Logo" />
-              <LogoText>Open Inference</LogoText>
+              <LogoText></LogoText>
             </LogoWrapper>
             
             <MobileMenuButton onClick={toggleMenu}>
