@@ -248,7 +248,7 @@ const ChatDemo = () => {
   const inputRef = useRef(null);
 
   // Функция для отправки запросов к API
-  const sendApiRequest = async (message, isInitial = false) => {
+  const sendApiRequest = useCallback(async (message, isInitial = false) => {
     try {
       const response = await fetch('https://oibackend.onrender.com/chat', {
         method: 'POST',
@@ -274,7 +274,7 @@ const ChatDemo = () => {
       console.error('Ошибка при обращении к API:', error);
       throw error;
     }
-  };
+  }, [activeTab, chatHistory]);
 
   // Используем useCallback для мемоизации функции resetChat
   const resetChat = useCallback(async () => {
@@ -320,7 +320,8 @@ const ChatDemo = () => {
         isNew: true
       }]);
     }
-  }, [activeTab]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, sendApiRequest]);
 
   useEffect(() => {
     // При первом рендеринге или изменении activeTab показываем приветственное сообщение
