@@ -230,6 +230,37 @@ const defaultButtons = [
   'Как связаться с менеджером?'
 ];
 
+const mockMessages = {
+  'live-chat': [
+    {
+      sender: 'bot',
+      text: 'Привет! Я виртуальный ассистент магазина Sneakers Hub. Чем могу помочь вам сегодня?',
+      buttons: ['Какие кроссовки в наличии?', 'Как оформить заказ?', 'Есть ли скидки?'],
+      isNew: false
+    }
+  ],
+  'assistant': [
+    {
+      sender: 'bot',
+      text: 'Здравствуйте! Я ваш персональный ассистент Джарвис. Готов помочь с планированием задач, поиском информации и управлением данными.',
+      buttons: ['Расскажи о своих возможностях', 'Как ты можешь помочь бизнесу?', 'Какие интеграции доступны?'],
+      isNew: false
+    }
+  ]
+};
+
+const mockResponses = {
+  'Расскажи о компании': 'Open Inference — ведущая компания по разработке инновационных ИИ-решений. Мы специализируемся на создании интеллектуальных ботов, систем автоматизации и персональных ассистентов для бизнеса.',
+  'Какие услуги вы предлагаете?': 'Мы предлагаем широкий спектр услуг: разработку чат-ботов, создание персональных ИИ-ассистентов, автоматизацию бизнес-процессов, анализ данных и интеграцию ИИ-технологий в существующие системы.',
+  'Как связаться с менеджером?': 'Вы можете связаться с нашим менеджером по телефону +7 (777) 356-22-24 или отправить email на адрес openinference17@gmail.com. Также вы можете заполнить форму обратной связи на нашем сайте.',
+  'Какие кроссовки в наличии?': 'У нас широкий ассортимент кроссовок от ведущих брендов: Nike, Adidas, Puma, New Balance и других. Популярные модели: Nike Air Max, Adidas Ultraboost, New Balance 574. Размеры от 35 до 47.',
+  'Как оформить заказ?': 'Для оформления заказа добавьте товар в корзину, перейдите в неё, укажите адрес доставки и способ оплаты. После подтверждения заказа вам придет уведомление и номер для отслеживания.',
+  'Есть ли скидки?': 'Да, у нас регулярно проходят акции и скидки! Сейчас действует сезонная распродажа со скидками до 40%. Также у нас есть программа лояльности и специальные предложения для постоянных клиентов.',
+  'Расскажи о своих возможностях': 'Я могу помочь вам планировать встречи, напоминать о важных событиях, искать информацию в интернете, управлять списками задач, отвечать на вопросы и даже анализировать данные. Моя цель — сделать вашу работу эффективнее.',
+  'Как ты можешь помочь бизнесу?': 'Для бизнеса я могу автоматизировать рутинные задачи, систематизировать информацию, помогать с планированием рабочего времени команды, анализировать данные и готовить отчеты, а также отвечать на типовые вопросы клиентов.',
+  'Какие интеграции доступны?': 'Я интегрируюсь с популярными бизнес-инструментами, включая Google Workspace, Microsoft 365, Trello, Asana, Slack, CRM-системы (Salesforce, HubSpot), аналитические платформы и многие другие сервисы.'
+};
+
 const ChatDemo = () => {
   const [activeTab, setActiveTab] = useState('live-chat');
   const [messages, setMessages] = useState([]);
@@ -240,61 +271,23 @@ const ChatDemo = () => {
   const inputRef = useRef(null);
 
   // Используем useCallback для мемоизации функции resetChat
-  const resetChat = useCallback(async () => {
+  const resetChat = useCallback(() => {
     setMessages([]);
     setInputValue('');
     setError(null);
     setIsTyping(true);
 
-    try {
-      // Получаем приветственное сообщение от API
-      const response = await fetch('https://oibackend.onrender.com/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        body: JSON.stringify({
-          message: 'Привет ',
-          isInitial: true,
-          type: activeTab === 'live-chat' ? 'bot' : 'assistant'
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Не удалось получить ответ от сервера');
-      }
-
-      const data = await response.json();
-      
-      setTimeout(() => {
-        setIsTyping(false);
-        setMessages([{
-          sender: 'bot',
-          text: data.response || 'Привет! Чем я могу помочь вам сегодня?',
-          buttons: data.buttons || defaultButtons,
-          isNew: true
-        }]);
-      }, 1000);
-    } catch (err) {
-      console.error('Ошибка при запросе к API:', err);
+    // Показываем сообщения из заглушки данных
+    setTimeout(() => {
       setIsTyping(false);
-      setError('Не удалось подключиться к серверу. Пожалуйста, проверьте соединение.');
-      
-      // Показываем дефолтное сообщение в случае ошибки
-      setMessages([{
-        sender: 'bot',
-        text: 'Привет! Я виртуальный ассистент. Чем могу помочь вам сегодня?',
-        buttons: defaultButtons,
-        isNew: true
-      }]);
-    }
-  }, [activeTab]); // Указываем зависимость от activeTab
+      setMessages(mockMessages[activeTab]);
+    }, 1000);
+  }, [activeTab]);
 
   useEffect(() => {
     // При первом рендеринге или изменении activeTab показываем приветственное сообщение
     resetChat();
-  }, [activeTab, resetChat]); // Добавляем resetChat в массив зависимостей
+  }, [activeTab, resetChat]);
 
   useEffect(() => {
     // Прокручиваем чат вниз при добавлении новых сообщений
@@ -303,7 +296,7 @@ const ChatDemo = () => {
     }
   }, [messages]);
 
-  const sendMessage = async (text) => {
+  const sendMessage = (text) => {
     if (!text.trim()) return;
     
     // Добавляем сообщение пользователя
@@ -314,48 +307,21 @@ const ChatDemo = () => {
     // Показываем "печатает..."
     setIsTyping(true);
     
-    try {
-      // Отправляем сообщение на API
-      const response = await fetch('https://oibackend.onrender.com/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: text,
-          type: activeTab === 'live-chat' ? 'bot' : 'assistant',
-          history: messages.map(msg => ({
-            role: msg.sender === 'bot' ? 'assistant' : 'user',
-            content: msg.text
-          }))
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Не удалось получить ответ от сервера');
-      }
-      
-      const data = await response.json();
-      console.log(data)
-      // Добавляем ответ бота после небольшой задержки
-      setTimeout(() => {
-        setIsTyping(false);
-        setMessages(prev => [...prev, {
-          sender: 'bot',
-          text: data.n8n_response.output ,
-          buttons: data.buttons || [],
-          isNew: true
-        }]);
-      }, 1500);
-    } catch (err) {
-      console.error('Ошибка при отправке сообщения:', err);
+    // Имитируем запрос к API и получение ответа
+    setTimeout(() => {
       setIsTyping(false);
+      
+      // Получаем ответ из заготовленных данных или формируем стандартный
+      const botResponse = mockResponses[text] || 
+        `Я получил ваше сообщение: "${text}". В данный момент я работаю в демо-режиме и могу отвечать только на заранее заготовленные вопросы.`;
+      
       setMessages(prev => [...prev, {
         sender: 'bot',
-        text: 'Извините, произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте еще раз.',
+        text: botResponse,
+        buttons: [],
         isNew: true
       }]);
-    }
+    }, 1500);
   };
 
   const handleButtonClick = (text) => {
