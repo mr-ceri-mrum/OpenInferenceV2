@@ -30,7 +30,7 @@ const LogoWrapper = styled(Link)`
 
 const LogoImage = styled.img`
   width: 100px;
-  height: 120px;
+  height: auto;
   margin-right: 10px;
 `;
 
