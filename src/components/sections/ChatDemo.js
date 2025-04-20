@@ -230,11 +230,26 @@ const defaultButtons = [
   'Как связаться с менеджером?'
 ];
 
-// Резервные ответы на случай, если API не ответит
-const fallbackResponses = {
-  'Расскажи о компании': 'Open Inference — ведущая компания по разработке инновационных ИИ-решений. Мы специализируемся на создании интеллектуальных ботов, систем автоматизации и персональных ассистентов для бизнеса.',
-  'Какие услуги вы предлагаете?': 'Мы предлагаем широкий спектр услуг: разработку чат-ботов, создание персональных ИИ-ассистентов, автоматизацию бизнес-процессов, анализ данных и интеграцию ИИ-технологий в существующие системы.',
-  'Как связаться с менеджером?': 'Вы можете связаться с нашим менеджером по телефону +7 (777) 356-22-24 или отправить email на адрес openinference17@gmail.com. Также вы можете заполнить форму обратной связи на нашем сайте.'
+// Ответы бота для демонстрации без подключения к API
+const mockResponses = {
+  'live-chat': {
+    'default': 'Привет! Я бот Sneakers Hub. Чем могу помочь вам сегодня?',
+    'Расскажи о компании': 'Sneakers Hub - это магазин стильной и удобной обуви. Мы предлагаем широкий ассортимент кроссовок от ведущих мировых брендов.',
+    'Какие услуги вы предлагаете?': 'Мы предлагаем продажу кроссовок, консультации по подбору обуви, доставку по всей стране и программу лояльности для постоянных клиентов.',
+    'Как связаться с менеджером?': 'Вы можете связаться с менеджером по телефону +7 (777) 123-45-67 или отправить запрос через форму на нашем сайте.'
+  },
+  'assistant': {
+    'default': 'Здравствуйте! Я персональный ассистент Джарвис. Как я могу вам помочь?',
+    'Расскажи о компании': 'Open Inference - это компания, специализирующаяся на разработке ИИ-решений и веб-сайтов. Мы создаем инновационные продукты, которые помогают бизнесу расти.',
+    'Какие услуги вы предлагаете?': 'Мы предлагаем разработку и внедрение ИИ-ботов, персональных ассистентов, веб-сайтов и консультации по цифровой трансформации.',
+    'Как связаться с менеджером?': 'Вы можете связаться с менеджером по телефону +7 (777) 356-22-24 или написать на email openinference17@gmail.com.'
+  }
+};
+
+// Функция для получения ответа из заготовленных вариантов
+const getMockResponse = (type, message) => {
+  const responses = mockResponses[type];
+  return responses[message] || `Я не совсем понимаю вопрос "${message}". Пожалуйста, уточните или выберите один из предложенных вариантов.`;
 };
 
 const ChatDemo = () => {
@@ -243,90 +258,32 @@ const ChatDemo = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
   const chatBodyRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Функция для отправки запросов к API
-  const sendApiRequest = useCallback(async (message, isInitial = false) => {
-    try {
-      const response = await fetch('https://oibackend.onrender.com/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          message: message,
-          isInitial: isInitial,
-          type: activeTab === 'live-chat' ? 'bot' : 'assistant',
-          history: chatHistory
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`API ответил с ошибкой: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Ошибка при обращении к API:', error);
-      throw error;
-    }
-  }, [activeTab, chatHistory]);
-
   // Используем useCallback для мемоизации функции resetChat
-  const resetChat = useCallback(async () => {
+  const resetChat = useCallback(() => {
     setMessages([]);
     setInputValue('');
     setError(null);
     setIsTyping(true);
-    setChatHistory([]);
 
-    try {
-      // Отправляем первичный запрос к API
-      const data = await sendApiRequest('Привет', true);
-      
-      // Обновляем историю чата
-      setChatHistory([{
-        role: 'assistant',
-        content: data.response || 'Привет! Чем я могу помочь вам сегодня?'
-      }]);
-      
-      // Отображаем ответ от API или заготовленное приветственное сообщение
-      setTimeout(() => {
-        setIsTyping(false);
-        setMessages([{
-          sender: 'bot',
-          text: data.response || `Привет! Я ${activeTab === 'live-chat' ? 'виртуальный ассистент магазина Sneakers Hub' : 'ваш персональный ассистент Джарвис'}. Чем могу помочь вам сегодня?`,
-          buttons: data.buttons || defaultButtons,
-          isNew: true
-        }]);
-      }, 1000);
-    } catch (err) {
-      console.error('Ошибка при инициализации чата:', err);
+    // Используем локальные данные вместо обращения к API
+    setTimeout(() => {
       setIsTyping(false);
-      
-      // В случае ошибки показываем локальное приветственное сообщение
-      const welcomeMessage = activeTab === 'live-chat' ?
-        'Привет! Я виртуальный ассистент магазина Sneakers Hub. Чем могу помочь вам сегодня?' :
-        'Здравствуйте! Я ваш персональный ассистент Джарвис. Готов помочь с планированием задач, поиском информации и управлением данными.';
-      
       setMessages([{
         sender: 'bot',
-        text: welcomeMessage,
+        text: mockResponses[activeTab].default,
         buttons: defaultButtons,
         isNew: true
       }]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, sendApiRequest]);
+    }, 1000);
+  }, [activeTab]);
 
   useEffect(() => {
     // При первом рендеринге или изменении activeTab показываем приветственное сообщение
     resetChat();
-  }, [activeTab, resetChat]);
+  }, [activeTab, resetChat]); // Добавляем resetChat в массив зависимостей
 
   useEffect(() => {
     // Прокручиваем чат вниз при добавлении новых сообщений
@@ -335,7 +292,7 @@ const ChatDemo = () => {
     }
   }, [messages]);
 
-  const sendMessage = async (text) => {
+  const sendMessage = (text) => {
     if (!text.trim()) return;
     
     // Добавляем сообщение пользователя
@@ -343,73 +300,19 @@ const ChatDemo = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     
-    // Обновляем историю чата
-    const updatedHistory = [...chatHistory, {
-      role: 'user',
-      content: text
-    }];
-    setChatHistory(updatedHistory);
-    
     // Показываем "печатает..."
     setIsTyping(true);
     
-    try {
-      // Отправляем запрос к API
-      const data = await sendApiRequest(text);
-      
-      // Получаем ответ от API или используем заготовленный
-      let botResponse;
-      let buttons = [];
-      
-      if (data && data.response) {
-        botResponse = data.response;
-        buttons = data.buttons || [];
-        
-        // Добавляем ответ бота в историю чата
-        setChatHistory([...updatedHistory, {
-          role: 'assistant',
-          content: botResponse
-        }]);
-      } else if (data && data.n8n_response && data.n8n_response.output) {
-        botResponse = data.n8n_response.output;
-        buttons = data.buttons || [];
-        
-        // Добавляем ответ бота в историю чата
-        setChatHistory([...updatedHistory, {
-          role: 'assistant',
-          content: botResponse
-        }]);
-      } else {
-        // Если API не вернул ответ, используем заготовленные
-        botResponse = fallbackResponses[text] || 
-          `Извините, я не смог получить ответ от сервера. Я буду рад помочь вам с другими вопросами.`;
-      }
-      
-      // Отображаем ответ с небольшой задержкой
-      setTimeout(() => {
-        setIsTyping(false);
-        setMessages(prev => [...prev, {
-          sender: 'bot',
-          text: botResponse,
-          buttons: buttons,
-          isNew: true
-        }]);
-      }, 1000);
-      
-    } catch (err) {
-      console.error('Ошибка при отправке сообщения:', err);
+    // Используем локальные данные вместо обращения к API
+    setTimeout(() => {
       setIsTyping(false);
-      
-      // В случае ошибки используем заготовленные ответы или стандартный ответ
-      const fallbackResponse = fallbackResponses[text] || 
-        `Извините, произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте позже или задайте другой вопрос.`;
-      
       setMessages(prev => [...prev, {
         sender: 'bot',
-        text: fallbackResponse,
+        text: getMockResponse(activeTab, text),
+        buttons: [],
         isNew: true
       }]);
-    }
+    }, 1500);
   };
 
   const handleButtonClick = (text) => {
