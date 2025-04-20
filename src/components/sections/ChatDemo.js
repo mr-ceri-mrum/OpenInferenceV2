@@ -5,11 +5,19 @@ import Container from '../common/Container';
 const ChatDemoSection = styled.section`
   padding: 80px 0;
   background-color: var(--white);
+  
+  @media (max-width: 768px) {
+    padding: 60px 0; // Уменьшаем отступы для мобильной версии
+  }
 `;
 
 const SectionTitle = styled.div`
   text-align: center;
   margin-bottom: 40px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const Title = styled.h2`
@@ -17,12 +25,22 @@ const Title = styled.h2`
   font-weight: 700;
   color: var(--dark-blue);
   margin-bottom: 15px;
+  
+  @media (max-width: 768px) {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
 `;
 
 const Subtitle = styled.p`
   color: #666;
   max-width: 700px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 0 15px;
+  }
 `;
 
 const TabsContainer = styled.div`
@@ -33,6 +51,7 @@ const TabsContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px;
   }
 `;
 
@@ -53,8 +72,10 @@ const TabButton = styled.button`
   }
   
   @media (max-width: 768px) {
-    margin: 10px 0;
-    width: 80%;
+    margin: 6px 0;
+    width: 90%;
+    padding: 10px 20px;
+    font-size: 14px;
   }
 `;
 
@@ -65,6 +86,11 @@ const ChatContainer = styled.div`
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 768px) {
+    width: 95%;
+    border-radius: 12px;
+  }
 `;
 
 const ChatHeader = styled.div`
@@ -72,12 +98,20 @@ const ChatHeader = styled.div`
   color: var(--white);
   padding: 20px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 `;
 
 const ChatHeaderTitle = styled.h3`
   font-size: 22px;
   font-weight: 600;
   margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const ChatBody = styled.div`
@@ -87,6 +121,12 @@ const ChatBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+    height: 350px; // Уменьшаем высоту для мобильных устройств
+    gap: 10px;
+  }
 `;
 
 const Message = styled.div`
@@ -97,6 +137,10 @@ const Message = styled.div`
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
   }
 `;
 
@@ -110,11 +154,21 @@ const BotAvatar = styled.div`
   justify-content: center;
   margin-right: 10px;
   flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+  }
 `;
 
 const BotIcon = styled.div`
   color: var(--primary-purple);
   font-size: 20px;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const UserAvatar = styled.div`
@@ -128,11 +182,21 @@ const UserAvatar = styled.div`
   margin-left: 10px;
   flex-shrink: 0;
   order: 2;
+  
+  @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+    margin-left: 8px;
+  }
 `;
 
 const UserIcon = styled.div`
   color: var(--primary-blue);
   font-size: 20px;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const MessageContent = styled.div`
@@ -143,6 +207,12 @@ const MessageContent = styled.div`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   order: ${props => props.isUser ? 1 : 0};
   max-width: 80%;
+  
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    border-radius: ${props => props.isUser ? '12px 12px 0 12px' : '12px 12px 12px 0'};
+    max-width: 85%; // Немного увеличиваем для лучшего использования пространства
+  }
 `;
 
 const MessageText = styled.p`
@@ -150,6 +220,11 @@ const MessageText = styled.p`
   color: var(--dark-blue);
   line-height: 1.5;
   white-space: pre-wrap;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 1.4;
+  }
 `;
 
 const QuestionButtons = styled.div`
@@ -157,6 +232,11 @@ const QuestionButtons = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
+  
+  @media (max-width: 768px) {
+    margin-top: 8px;
+    gap: 6px;
+  }
 `;
 
 const QuestionButton = styled.button`
@@ -173,12 +253,22 @@ const QuestionButton = styled.button`
     background-color: var(--primary-purple);
     color: var(--white);
   }
+  
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 16px;
+  }
 `;
 
 const ChatFooter = styled.div`
   padding: 15px 20px;
   border-top: 1px solid #f0f0f0;
   display: flex;
+  
+  @media (max-width: 768px) {
+    padding: 12px 15px;
+  }
 `;
 
 const ChatInput = styled.input`
@@ -192,6 +282,12 @@ const ChatInput = styled.input`
   &:focus {
     border-color: var(--primary-purple);
     box-shadow: 0 0 0 2px rgba(123, 47, 247, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 20px;
   }
 `;
 
@@ -213,6 +309,13 @@ const ChatSendButton = styled.button`
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   }
+  
+  @media (max-width: 768px) {
+    width: 38px;
+    height: 38px;
+    margin-left: 8px;
+    font-size: 14px;
+  }
 `;
 
 const ErrorMessage = styled.div`
@@ -222,6 +325,13 @@ const ErrorMessage = styled.div`
   border-radius: 10px;
   margin-bottom: 15px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 8px 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+  }
 `;
 
 const ReconnectButton = styled.button`
@@ -236,6 +346,12 @@ const ReconnectButton = styled.button`
   
   &:hover {
     background-color: var(--primary-purple);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    margin-top: 8px;
+    font-size: 13px;
   }
 `;
 
