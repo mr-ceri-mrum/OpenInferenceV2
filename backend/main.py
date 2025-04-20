@@ -6,7 +6,9 @@ from starlette.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",  # React
+    "http://localhost:3000",
+    "http://26.45.118.179:3000",
+      "https://luminous-lolly-87ff54.netlify.app/"  # React
     # Можно добавить другие, например продакшн-домен
 ]
 

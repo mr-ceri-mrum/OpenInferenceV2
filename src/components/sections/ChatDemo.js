@@ -390,7 +390,7 @@ const ChatDemo = () => {
         }]);
       }, 800);
     }
-  }, [apiAvailable, checkApiAvailability]);
+  }, [apiAvailable]); // Удалена зависимость от checkApiAvailability
 
   // Инициализация компонента
   useEffect(() => {
@@ -419,6 +419,7 @@ const ChatDemo = () => {
         clearInterval(apiCheckTimeoutRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkApiAvailability, resetChat, apiAvailable, error]);
 
   // Прокрутка чата вниз при добавлении новых сообщений
