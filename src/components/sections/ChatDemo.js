@@ -358,7 +358,7 @@ const ChatDemo = () => {
           setIsTyping(false);
           setMessages([{
             sender: 'bot',
-            text: data.response || fallbackResponses.default,
+            text: data.response.n8n_response.output || fallbackResponses.default,
             buttons: defaultButtons,
             isNew: true
           }]);
