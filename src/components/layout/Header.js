@@ -20,6 +20,10 @@ const HeaderContent = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px 0;
+  
+  @media (max-width: 768px) {
+    padding: 12px 0; // Уменьшаем вертикальные отступы для мобильных устройств
+  }
 `;
 
 const LogoWrapper = styled(Link)`
@@ -32,12 +36,21 @@ const LogoImage = styled.img`
   width: 100px;
   height: auto;
   margin-right: 10px;
+  
+  @media (max-width: 768px) {
+    width: 70px; // Уменьшаем размер логотипа для мобильных устройств
+    margin-right: 5px;
+  }
 `;
 
 const LogoText = styled.h1`
   font-size: 24px;
   font-weight: 700;
   color: var(--dark-blue);
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const Nav = styled.nav`
@@ -50,7 +63,7 @@ const Nav = styled.nav`
     right: 0;
     background-color: var(--white);
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px 0;
+    padding: 15px 0; // Уменьшаем внутренние отступы
   }
 `;
 
@@ -68,7 +81,7 @@ const NavItem = styled.li`
   margin-left: 30px;
   
   @media (max-width: 768px) {
-    margin: 10px 0;
+    margin: 8px 0; // Уменьшаем отступы между пунктами меню
     text-align: center;
   }
 `;
@@ -81,6 +94,10 @@ const NavLink = styled(Link)`
   
   &:hover {
     color: var(--primary-purple);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 15px; // Уменьшаем размер шрифта
   }
 `;
 
@@ -98,6 +115,10 @@ const NavButton = styled.button`
   &:hover {
     color: var(--primary-purple);
   }
+  
+  @media (max-width: 768px) {
+    font-size: 15px; // Уменьшаем размер шрифта
+  }
 `;
 
 const MobileMenuButton = styled.button`
@@ -109,6 +130,8 @@ const MobileMenuButton = styled.button`
   
   @media (max-width: 768px) {
     display: block;
+    font-size: 22px; // Немного уменьшаем значок меню
+    padding: 5px; // Добавляем немного паддинга для удобства нажатия
   }
 `;
 
