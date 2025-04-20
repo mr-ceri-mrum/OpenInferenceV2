@@ -240,7 +240,7 @@ const ReconnectButton = styled.button`
 `;
 
 // Конфигурация API
-const API_URL = 'https://oibackend.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const API_TIMEOUT = 10000; // 10 секунд
 
 // Функция для осуществления запроса с таймаутом
@@ -390,7 +390,7 @@ const ChatDemo = () => {
         }]);
       }, 800);
     }
-  }, [apiAvailable, checkApiAvailability]);
+  }, [apiAvailable]); // Удалена зависимость от checkApiAvailability
 
   // Инициализация компонента
   useEffect(() => {
@@ -419,6 +419,7 @@ const ChatDemo = () => {
         clearInterval(apiCheckTimeoutRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkApiAvailability, resetChat, apiAvailable, error]);
 
   // Прокрутка чата вниз при добавлении новых сообщений
