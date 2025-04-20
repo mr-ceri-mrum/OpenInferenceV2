@@ -10,6 +10,11 @@ const HeroSection = styled.section`
   @media (max-width: 992px) {
     text-align: center;
   }
+  
+  @media (max-width: 768px) {
+    padding-top: 90px; /* Уменьшаем верхний отступ для мобильных устройств с учетом уменьшенного хедера */
+    padding-bottom: 60px;
+  }
 `;
 
 const HeroContent = styled.div`
@@ -30,6 +35,11 @@ const HeroTextContainer = styled.div`
     padding-right: 0;
     margin-bottom: 40px;
   }
+  
+  @media (max-width: 768px) {
+    margin-bottom: 30px;
+    padding: 0 10px;
+  }
 `;
 
 const HeroTitle = styled.h2`
@@ -42,7 +52,12 @@ const HeroTitle = styled.h2`
   color: transparent;
   
   @media (max-width: 768px) {
-    font-size: 36px;
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 28px;
   }
 `;
 
@@ -53,6 +68,11 @@ const HeroDescription = styled.p`
   
   @media (max-width: 768px) {
     font-size: 16px;
+    margin-bottom: 25px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 15px;
   }
 `;
 
@@ -73,13 +93,22 @@ const HeroImage = styled.div`
   text-align: center;
   
   @media (max-width: 768px) {
-    height: 300px;
+    height: 280px;
+    border-radius: 8px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 240px;
   }
 `;
 
 const HeroImageContent = styled.div`
   max-width: 800px;
   padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    padding: 0 15px;
+  }
 `;
 
 const HeroImageTitle = styled.h1`
@@ -87,7 +116,13 @@ const HeroImageTitle = styled.h1`
   margin-bottom: 20px;
   
   @media (max-width: 768px) {
-    font-size: 1.5em;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.2em;
+    margin-bottom: 10px;
   }
 `;
 
@@ -96,7 +131,14 @@ const HeroImageText = styled.p`
   margin-bottom: 30px;
   
   @media (max-width: 768px) {
-    font-size: 1em;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.85em;
+    margin-bottom: 15px;
+    line-height: 1.4;
   }
 `;
 
