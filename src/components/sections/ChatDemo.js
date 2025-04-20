@@ -352,13 +352,14 @@ const ChatDemo = () => {
         }
 
         const data = await response.json();
+
         setMessageHistory([{ role: 'user', content: 'Привет' }, { role: 'assistant', content: data.response || fallbackResponses.default }]);
         
         setTimeout(() => {
           setIsTyping(false);
           setMessages([{
             sender: 'bot',
-            text: data.response.n8n_response.output || fallbackResponses.default,
+            text: data.n8n_response.output || fallbackResponses.default,
             buttons: defaultButtons,
             isNew: true
           }]);
