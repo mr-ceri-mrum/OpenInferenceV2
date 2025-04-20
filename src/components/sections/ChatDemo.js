@@ -352,7 +352,7 @@ const ChatDemo = () => {
         }
 
         const data = await response.json();
-
+        console.log(data.n8n_response.output)
         setMessageHistory([{ role: 'user', content: 'Привет' }, { role: 'assistant', content: data.response || fallbackResponses.default }]);
         
         setTimeout(() => {
@@ -465,7 +465,7 @@ const ChatDemo = () => {
         }
         
         const data = await response.json();
-        const botResponse = data.response || getFallbackResponse(text);
+        const botResponse = data.n8n_response.output || getFallbackResponse(text);
         
         // Обновляем историю сообщений
         setMessageHistory([...updatedHistory, { role: 'assistant', content: botResponse }]);
