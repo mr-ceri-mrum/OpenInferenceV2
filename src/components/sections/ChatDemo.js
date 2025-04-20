@@ -224,75 +224,212 @@ const ErrorMessage = styled.div`
   text-align: center;
 `;
 
+const ReconnectButton = styled.button`
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  
+  &:hover {
+    background-color: var(--primary-purple);
+  }
+`;
+
+// Конфигурация API
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_TIMEOUT = 10000; // 10 секунд
+
+// Функция для осуществления запроса с таймаутом
+const fetchWithTimeout = async (url, options, timeout = API_TIMEOUT) => {
+  const controller = new AbortController();
+  const { signal } = controller;
+  
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, { ...options, signal });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
+  }
+};
+
+// Дефолтные подсказки для чата
 const defaultButtons = [
-  'Расскажи о компании',
+  'Расскажи о компании OpenInference',
   'Какие услуги вы предлагаете?',
   'Как связаться с менеджером?'
 ];
 
-// Ответы бота для демонстрации без подключения к API
-const mockResponses = {
-  'live-chat': {
-    'default': 'Привет! Я бот Sneakers Hub. Чем могу помочь вам сегодня?',
-    'Расскажи о компании': 'Sneakers Hub - это магазин стильной и удобной обуви. Мы предлагаем широкий ассортимент кроссовок от ведущих мировых брендов.',
-    'Какие услуги вы предлагаете?': 'Мы предлагаем продажу кроссовок, консультации по подбору обуви, доставку по всей стране и программу лояльности для постоянных клиентов.',
-    'Как связаться с менеджером?': 'Вы можете связаться с менеджером по телефону +7 (777) 123-45-67 или отправить запрос через форму на нашем сайте.'
-  },
-  'assistant': {
-    'default': 'Здравствуйте! Я персональный ассистент Джарвис. Как я могу вам помочь?',
-    'Расскажи о компании': 'Open Inference - это компания, специализирующаяся на разработке ИИ-решений и веб-сайтов. Мы создаем инновационные продукты, которые помогают бизнесу расти.',
-    'Какие услуги вы предлагаете?': 'Мы предлагаем разработку и внедрение ИИ-ботов, персональных ассистентов, веб-сайтов и консультации по цифровой трансформации.',
-    'Как связаться с менеджером?': 'Вы можете связаться с менеджером по телефону +7 (777) 356-22-24 или написать на email openinference17@gmail.com.'
-  }
+// Резервные ответы на случай, если API недоступен
+const fallbackResponses = {
+  'default': 'Здравствуйте! Я ассистент компании OpenInference. Чем я могу вам помочь?',
+  'Расскажи о компании OpenInference': 'OpenInference - инновационная компания, специализирующаяся на разработке и внедрении решений на базе искусственного интеллекта для бизнеса. Мы помогаем компаниям автоматизировать процессы, повышать эффективность и достигать новых высот с помощью современных технологий.',
+  'Какие услуги вы предлагаете?': 'Мы предлагаем широкий спектр услуг: разработку чат-ботов и виртуальных ассистентов, внедрение систем анализа данных, создание персонализированных рекомендательных систем, интеграцию ИИ в существующие бизнес-процессы и консультации по цифровой трансформации.',
+  'Как связаться с менеджером?': 'Вы можете связаться с нашим менеджером по телефону +7 (777) 356-22-24 или написать на email openinference17@gmail.com. Также вы можете заполнить форму обратной связи на нашем сайте, и мы свяжемся с вами в ближайшее время.'
 };
 
-// Функция для получения ответа из заготовленных вариантов
-const getMockResponse = (type, message) => {
-  const responses = mockResponses[type];
-  return responses[message] || `Я не совсем понимаю вопрос "${message}". Пожалуйста, уточните или выберите один из предложенных вариантов.`;
+// Функция для получения ответа из резервных вариантов
+const getFallbackResponse = (message) => {
+  return fallbackResponses[message] || `Я не совсем понимаю вопрос "${message}". Пожалуйста, уточните или выберите один из предложенных вариантов.`;
 };
 
 const ChatDemo = () => {
-  const [activeTab, setActiveTab] = useState('live-chat');
+  const [activeTab, setActiveTab] = useState('live-ai');
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [apiAvailable, setApiAvailable] = useState(true);
   const [error, setError] = useState(null);
+  const [messageHistory, setMessageHistory] = useState([]);
   const chatBodyRef = useRef(null);
   const inputRef = useRef(null);
+  const apiCheckTimeoutRef = useRef(null);
 
-  // Используем useCallback для мемоизации функции resetChat
-  const resetChat = useCallback(() => {
+  // Проверка доступности API
+  const checkApiAvailability = useCallback(async () => {
+    try {
+      const response = await fetchWithTimeout(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: 'ping' }),
+      });
+      
+      setApiAvailable(response.ok);
+      if (response.ok) {
+        setError(null);
+      } else {
+        setError('Сервер доступен, но вернул ошибку. Используется резервный режим.');
+      }
+      
+      return response.ok;
+    } catch (err) {
+      console.warn('API недоступен:', err);
+      setApiAvailable(false);
+      setError('Не удалось подключиться к серверу. Используется резервный режим.');
+      return false;
+    }
+  }, []);
+
+  // Попытка переподключения к API
+  const retryConnection = async () => {
+    setError('Попытка подключения к серверу...');
+    const isAvailable = await checkApiAvailability();
+    
+    if (isAvailable) {
+      resetChat();
+    }
+  };
+
+  // Инициализация чата
+  const resetChat = useCallback(async () => {
     setMessages([]);
     setInputValue('');
-    setError(null);
+    setMessageHistory([]);
     setIsTyping(true);
 
-    // Используем локальные данные вместо обращения к API
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages([{
-        sender: 'bot',
-        text: mockResponses[activeTab].default,
-        buttons: defaultButtons,
-        isNew: true
-      }]);
-    }, 1000);
-  }, [activeTab]);
+    // Если API доступен, отправляем запрос
+    if (apiAvailable) {
+      try {
+        const response = await fetchWithTimeout(`${API_URL}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: 'Привет' }),
+        });
 
-  useEffect(() => {
-    // При первом рендеринге или изменении activeTab показываем приветственное сообщение
-    resetChat();
-  }, [activeTab, resetChat]); // Добавляем resetChat в массив зависимостей
+        if (!response.ok) {
+          throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
 
+        const data = await response.json();
+        setMessageHistory([{ role: 'user', content: 'Привет' }, { role: 'assistant', content: data.response || fallbackResponses.default }]);
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages([{
+            sender: 'bot',
+            text: data.response || fallbackResponses.default,
+            buttons: defaultButtons,
+            isNew: true
+          }]);
+        }, 800);
+      } catch (err) {
+        console.error('Ошибка при обращении к API:', err);
+        setApiAvailable(false);
+        setError('Не удалось подключиться к серверу. Используется резервный режим.');
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages([{
+            sender: 'bot',
+            text: fallbackResponses.default,
+            buttons: defaultButtons,
+            isNew: true
+          }]);
+        }, 800);
+      }
+    } else {
+      // Используем резервные ответы, если API недоступен
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages([{
+          sender: 'bot',
+          text: fallbackResponses.default,
+          buttons: defaultButtons,
+          isNew: true
+        }]);
+      }, 800);
+    }
+  }, [apiAvailable, checkApiAvailability]);
+
+  // Инициализация компонента
   useEffect(() => {
-    // Прокручиваем чат вниз при добавлении новых сообщений
+    // Проверяем доступность API при первой загрузке
+    const initializeChat = async () => {
+      await checkApiAvailability();
+      resetChat();
+    };
+    
+    initializeChat();
+    
+    // Устанавливаем регулярную проверку доступности API
+    apiCheckTimeoutRef.current = setInterval(async () => {
+      if (!apiAvailable) {
+        const isAvailable = await checkApiAvailability();
+        if (isAvailable && error) {
+          setError('Соединение с сервером восстановлено.');
+          setTimeout(() => setError(null), 3000);
+        }
+      }
+    }, 30000); // Проверяем каждые 30 секунд
+    
+    return () => {
+      // Очищаем интервал при размонтировании компонента
+      if (apiCheckTimeoutRef.current) {
+        clearInterval(apiCheckTimeoutRef.current);
+      }
+    };
+  }, [checkApiAvailability, resetChat, apiAvailable, error]);
+
+  // Прокрутка чата вниз при добавлении новых сообщений
+  useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const sendMessage = (text) => {
+  // Отправка сообщения в чат
+  const sendMessage = async (text) => {
     if (!text.trim()) return;
     
     // Добавляем сообщение пользователя
@@ -300,19 +437,74 @@ const ChatDemo = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     
+    // Обновляем историю сообщений
+    const updatedHistory = [...messageHistory, { role: 'user', content: text }];
+    setMessageHistory(updatedHistory);
+    
     // Показываем "печатает..."
     setIsTyping(true);
     
-    // Используем локальные данные вместо обращения к API
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages(prev => [...prev, {
-        sender: 'bot',
-        text: getMockResponse(activeTab, text),
-        buttons: [],
-        isNew: true
-      }]);
-    }, 1500);
+    // Если API доступен, отправляем запрос
+    if (apiAvailable) {
+      try {
+        const response = await fetchWithTimeout(`${API_URL}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: text,
+            history: updatedHistory
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const botResponse = data.response || getFallbackResponse(text);
+        
+        // Обновляем историю сообщений
+        setMessageHistory([...updatedHistory, { role: 'assistant', content: botResponse }]);
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages(prev => [...prev, {
+            sender: 'bot',
+            text: botResponse,
+            buttons: data.buttons || [],
+            isNew: true
+          }]);
+        }, 1000);
+      } catch (err) {
+        console.error('Ошибка при отправке сообщения:', err);
+        setApiAvailable(false);
+        setError('Потеряно соединение с сервером. Используется резервный режим.');
+        
+        // Используем резервные ответы в случае ошибки
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages(prev => [...prev, {
+            sender: 'bot',
+            text: getFallbackResponse(text),
+            buttons: [],
+            isNew: true
+          }]);
+        }, 1000);
+      }
+    } else {
+      // Используем резервные ответы, если API недоступен
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [...prev, {
+          sender: 'bot',
+          text: getFallbackResponse(text),
+          buttons: [],
+          isNew: true
+        }]);
+      }, 1000);
+    }
   };
 
   const handleButtonClick = (text) => {
@@ -333,46 +525,61 @@ const ChatDemo = () => {
     sendMessage(inputValue);
   };
 
+  // Для демонстрационных целей меняем настройки в зависимости от активной вкладки
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    resetChat();
+  };
+
   return (
     <ChatDemoSection id="chat-demo">
       <Container>
         <SectionTitle>
-          <Title>Демонстрация работы ИИ</Title>
+          <Title>Демонстрация ИИ-решений</Title>
           <Subtitle>
-            Посмотрите, как работают наши ИИ-решения в реальных сценариях
+            Посмотрите, как наши ИИ-решения могут улучшить взаимодействие с клиентами и оптимизировать бизнес-процессы
           </Subtitle>
         </SectionTitle>
         
         <TabsContainer>
           <TabButton 
-            active={activeTab === 'live-chat'} 
-            onClick={() => setActiveTab('live-chat')}
+            active={activeTab === 'live-ai'} 
+            onClick={() => handleTabChange('live-ai')}
           >
-            ИИ бот для магазина
+            ИИ-ассистент
           </TabButton>
           <TabButton 
-            active={activeTab === 'assistant'} 
-            onClick={() => setActiveTab('assistant')}
+            active={activeTab === 'demo'} 
+            onClick={() => handleTabChange('demo')}
           >
-            Персональный ассистент
+            Демонстрация бота
           </TabButton>
         </TabsContainer>
         
         <ChatContainer>
           <ChatHeader>
             <ChatHeaderTitle>
-              {activeTab === 'live-chat' ? 'Чат с ботом Sneakers Hub' : 'Чат с ассистентом Джарвис'}
+              {activeTab === 'live-ai' ? 'ИИ-ассистент OpenInference' : 'Демонстрация бота для бизнеса'}
             </ChatHeaderTitle>
           </ChatHeader>
           
           <ChatBody ref={chatBodyRef}>
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {error && (
+              <ErrorMessage>
+                {error}
+                {!apiAvailable && (
+                  <ReconnectButton onClick={retryConnection}>
+                    Попробовать подключиться
+                  </ReconnectButton>
+                )}
+              </ErrorMessage>
+            )}
             
             {messages.map((msg, index) => (
               <Message key={index} isNew={msg.isNew}>
                 {msg.sender === 'bot' ? (
                   <BotAvatar>
-                    <BotIcon>{activeTab === 'live-chat' ? '👟' : '🤖'}</BotIcon>
+                    <BotIcon>🤖</BotIcon>
                   </BotAvatar>
                 ) : (
                   <UserAvatar>
@@ -402,7 +609,7 @@ const ChatDemo = () => {
             {isTyping && (
               <Message>
                 <BotAvatar>
-                  <BotIcon>{activeTab === 'live-chat' ? '👟' : '🤖'}</BotIcon>
+                  <BotIcon>🤖</BotIcon>
                 </BotAvatar>
                 <MessageContent>
                   <MessageText>печатает...</MessageText>
