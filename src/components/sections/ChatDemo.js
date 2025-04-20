@@ -240,7 +240,7 @@ const ReconnectButton = styled.button`
 `;
 
 // Конфигурация API
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = 'https://oibackend.onrender.com';
 const API_TIMEOUT = 10000; // 10 секунд
 
 // Функция для осуществления запроса с таймаутом
